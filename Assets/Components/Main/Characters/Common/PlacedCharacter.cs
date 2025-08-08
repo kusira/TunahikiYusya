@@ -53,7 +53,6 @@ public class PlacedCharacter : MonoBehaviour
     [SerializeField] private float flashDuration = 0.3f;
     
     [Header("死亡演出の設定")]
-    [SerializeField] private float deathForce = 250f;
     [SerializeField] private float delayBeforeFade = 1.5f;
     [SerializeField] private float fadeDuration = 0.5f;
     #endregion
@@ -294,31 +293,61 @@ public class PlacedCharacter : MonoBehaviour
         }
     }
     
-    private void Die()
+    public void Die()
     {
         if (isDead) return;
         isDead = true;
 
-        if (mainSpriteRenderer != null) mainSpriteRenderer.DOKill();
-
-        if (CurrentHolder != null) CurrentHolder.SetOccupied(false);
-        if (boxCollider != null) boxCollider.enabled = false;
-        
-        var rb = gameObject.AddComponent<Rigidbody2D>();
-        rb.gravityScale = 1.0f;
-        float randomXDirection = Random.value < 0.5f ? -1f : 1f;
-        Vector2 forceDirection = new Vector2(randomXDirection, 1.5f).normalized;
-        rb.AddForce(forceDirection * deathForce);
-        rb.AddTorque(Random.Range(-180f, 180f));
-
-        Sequence deathSequence = DOTween.Sequence();
-        deathSequence.AppendInterval(delayBeforeFade);
-        if (mainSpriteRenderer != null)
+        if (CurrentHolder != null)
         {
-            deathSequence.Append(mainSpriteRenderer.DOFade(0, fadeDuration));
+            CurrentHolder.SetOccupied(false);
+            CurrentHolder = null; // オプション：参照を切る
+        }
+        
+        if (boxCollider != null) boxCollider.enabled = false;
+        if (hpGaugeRenderer != null) hpGaugeRenderer.gameObject.SetActive(false);
+        if (skillGaugeRenderer != null) skillGaugeRenderer.gameObject.SetActive(false);
+
+        // 吹っ飛びパラメータ
+        float randomXDirection = Random.value < 0.5f ? -1f : 1f;
+        float flyDistanceX = 1.5f * randomXDirection; // X方向の距離
+        float flyHeight = 2.0f;                       // Y方向の最大高さ
+        float flyDuration = 0.8f;                     // 吹っ飛び時間
+        float rotationAngle = 360f * randomXDirection; // 回転角度（方向も反転）
+
+        Vector3 startPos = transform.position;
+        Vector3 endPos = startPos + new Vector3(flyDistanceX, 0, 0); // 地面に戻る位置
+
+        // 放物線を描くアニメーション
+        DOTween.To(
+            () => 0f,
+            t =>
+            {
+                float x = Mathf.Lerp(startPos.x, endPos.x, t);
+                float y = Mathf.Lerp(startPos.y, startPos.y + flyHeight, t) * (1 - t) + startPos.y * t;
+                transform.position = new Vector3(x, y, startPos.z);
+            },
+            1f,
+            flyDuration
+        ).SetEase(Ease.Linear);
+
+        // 回転アニメーション
+        transform.DORotate(new Vector3(0, 0, rotationAngle), flyDuration, RotateMode.FastBeyond360)
+            .SetEase(Ease.OutCubic);
+
+        // フェードアウトと破棄
+        Sequence deathSequence = DOTween.Sequence();
+        deathSequence.AppendInterval(flyDuration + delayBeforeFade);
+        if (allRenderers.Length > 0)
+        {
+            foreach (var renderer in allRenderers)
+            {
+                deathSequence.Join(renderer.DOFade(0, fadeDuration));
+            }
         }
         deathSequence.OnComplete(() => Destroy(gameObject));
     }
+
 
     private void UpdateHpGauge()
     {

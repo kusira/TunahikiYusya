@@ -6,68 +6,68 @@ using DG.Tweening;
 [RequireComponent(typeof(Collider2D))]
 public class CharacterHolderManager : MonoBehaviour
 {
-    [Header("参照")]
-    [Tooltip("シーン内のBattleBeginsManagerをアサインしてください")]
-    [SerializeField] private BattleBeginsManager battleBeginsManager;
-
     [Header("スプライト設定")]
     [SerializeField] private Sprite characterHolderBlue;
     [SerializeField] private Sprite characterHolderGreen;
-    
+
     [Header("アニメーション設定")]
     [SerializeField] private float blueFadeInDuration = 0.25f;
     [SerializeField] private float battleStartFadeOutDuration = 0.5f;
-    [SerializeField] [Range(0f, 1f)] private float visibleAlpha = 1.0f;
-    
+    [SerializeField, Range(0f, 1f)] private float visibleAlpha = 1.0f;
+
     private SpriteRenderer spriteRenderer;
     private bool isOccupied = false;
-    
-    private enum State { Invisible, Blue, Green }
-    private State currentState = State.Invisible;
+    private BattleBeginsManager battleBeginsManager;
 
     public bool IsOccupied => isOccupied;
+
+    private enum State { Invisible, Blue, Green }
+    private State currentState = State.Invisible;
 
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // シーンから BattleBeginsManager を自動取得
+        battleBeginsManager = FindObjectOfType<BattleBeginsManager>();
+        if (battleBeginsManager == null)
+        {
+            Debug.LogError("BattleBeginsManager がシーンに見つかりません。");
+        }
     }
 
     void Update()
     {
         State targetState;
-        
-        // 【変更点】判定の優先順位を見直し
+
         if (isOccupied)
         {
-            // 1. 最優先：使用中のホルダーは常に非表示
+            // 使用中のホルダーは常に非表示
             targetState = State.Invisible;
         }
         else if (DragAndDropCharacterManager.IsDragging)
         {
-            // 2. 次点：ドラッグ中はバトル状態を問わず、表示状態を決定
+            // ドラッグ中：マウスが上にあれば緑、なければ青
             bool isHovered = IsMouseHovering();
             targetState = isHovered ? State.Green : State.Blue;
         }
         else if (battleBeginsManager != null && battleBeginsManager.IsInBattle)
         {
-            // 3. 次点：ドラッグ中でなく、バトル中なら非表示
+            // 戦闘中は非表示
             targetState = State.Invisible;
         }
         else
         {
-            // 4. 上記以外（バトル前でドラッグ中でもない）場合は常に青色で表示
+            // それ以外は青
             targetState = State.Blue;
         }
-        
-        if (currentState == targetState)
-        {
-            return;
-        }
-        
+
+        if (currentState == targetState) return;
+
         State oldState = currentState;
         currentState = targetState;
-        
-        spriteRenderer.DOKill();
+
+        spriteRenderer.DOKill(); // 既存のアニメーションを停止
 
         switch (currentState)
         {
@@ -81,7 +81,7 @@ public class CharacterHolderManager : MonoBehaviour
                     spriteRenderer.color = new Color(1, 1, 1, 0);
                 }
                 break;
-            
+
             case State.Blue:
                 spriteRenderer.sprite = characterHolderBlue;
                 if (oldState == State.Invisible)
@@ -102,17 +102,25 @@ public class CharacterHolderManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 外部からホルダーの使用状態を設定できるようにします。
+    /// キャラが死んだときなどに SetOccupied(false) を呼び出せば再利用可能になります。
+    /// </summary>
     public void SetOccupied(bool occupied)
     {
         isOccupied = occupied;
     }
 
+    /// <summary>
+    /// マウスがこのホルダーの上にあるかどうかを判定します。
+    /// </summary>
     private bool IsMouseHovering()
     {
-        RaycastHit2D[] hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero);
+        Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        RaycastHit2D[] hits = Physics2D.RaycastAll(mouseWorldPos, Vector2.zero);
         foreach (var hit in hits)
         {
-            if (hit.collider != null && hit.collider.gameObject == this.gameObject)
+            if (hit.collider != null && hit.collider.gameObject == gameObject)
             {
                 return true;
             }

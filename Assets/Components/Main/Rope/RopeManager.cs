@@ -63,7 +63,7 @@ public class RopeManager : MonoBehaviour
     private int lastEnemyAtk = -1;
     private Vector3 initialDiffTextScale;
 
-    void Awake()
+    void Start()
     {
         OccupiedHolderInfo = new Dictionary<GameObject, GameObject>();
         AliveEnemies = new List<PlacedEnemy>();
@@ -80,10 +80,6 @@ public class RopeManager : MonoBehaviour
                 if (placedEnemy != null) AliveEnemies.Add(placedEnemy);
             }
         }
-    }
-
-    void Start()
-    {
         if (diffAtkText != null)
         {
             initialDiffTextScale = diffAtkText.transform.localScale;

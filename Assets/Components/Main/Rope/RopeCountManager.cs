@@ -16,6 +16,8 @@ public class RopeCountManager : MonoBehaviour
     [Tooltip("ロープがフェードアウトして消えるまでの時間")]
     [SerializeField] private float fadeOutDuration = 1.0f;
 
+    private RopeManager ropeManager;
+
     // --- 外部から参照可能なstatic変数 ---
     /// <summary>味方が獲得したロープの数</summary>
     public static int AlliedRopeCount { get; private set; }
@@ -47,6 +49,17 @@ public class RopeCountManager : MonoBehaviour
         {
             Debug.LogError("UIオブジェクト 'AlliedRopeCount' または 'EnemyRopeCount' が見つかりません。");
         }
+
+        // RopeManagerの取得
+        ropeManager = GetComponent<RopeManager>();
+        if (ropeManager == null)
+        {
+#if UNITY_2023_1_OR_NEWER
+            ropeManager = FindFirstObjectByType<RopeManager>();
+#else
+            ropeManager = FindObjectOfType<RopeManager>();
+#endif
+        }
     }
 
     /// <summary>
@@ -54,24 +67,21 @@ public class RopeCountManager : MonoBehaviour
     /// </summary>
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // 既に獲得済みの場合は何もしない
         if (isCaptured) return;
 
-        // 味方の陣地に入った場合
         if (other.CompareTag("AlliedBase"))
         {
-            isCaptured = true; // 獲得済みにする
-            AlliedRopeCount++; // 味方のカウントを増やす
-            UpdateUICount(alliedCountText, AlliedRopeCount); // UIを更新
-            FadeOutAndDestroy(); // オブジェクトを消す
+            isCaptured = true;
+            AlliedRopeCount++;
+            UpdateUICount(alliedCountText, AlliedRopeCount);
+            FadeOutAndDestroy();
         }
-        // 敵の陣地に入った場合
         else if (other.CompareTag("EnemyBase"))
         {
-            isCaptured = true; // 獲得済みにする
-            EnemyRopeCount++; // 敵のカウントを増やす
-            UpdateUICount(enemyCountText, EnemyRopeCount); // UIを更新
-            FadeOutAndDestroy(); // オブジェクトを消す
+            isCaptured = true;
+            EnemyRopeCount++;
+            UpdateUICount(enemyCountText, EnemyRopeCount);
+            FadeOutAndDestroy();
         }
     }
 
@@ -81,31 +91,68 @@ public class RopeCountManager : MonoBehaviour
     private void UpdateUICount(TextMeshProUGUI textElement, int count)
     {
         if (textElement == null) return;
-        
-        // テキストの数値を更新
+
         textElement.text = count.ToString();
-        // テキストを拡大させてから元に戻すアニメーション
         textElement.transform.DOPunchScale(Vector3.one * textPunchScale, textPunchDuration, 1, 0.5f);
     }
 
     /// <summary>
-    /// このロープオブジェクト（子も含む）をフェードアウトさせてから破棄します。
+    /// フェードアウトアニメーション後にオブジェクトを削除します。勝敗処理も含みます。
     /// </summary>
     private void FadeOutAndDestroy()
     {
-        // このオブジェクトと子オブジェクトに含まれる全てのSpriteRendererを取得
+        // 勝敗判定とDie処理
+        if (ropeManager != null)
+        {
+            int alliedAtk = ropeManager.TotalAlliedAtk;
+            int enemyAtk = ropeManager.TotalEnemyAtk;
+
+            if (alliedAtk != enemyAtk)
+            {
+                bool isAlliedLoser = alliedAtk < enemyAtk;
+
+                if (isAlliedLoser)
+                {
+                    foreach (var kvp in ropeManager.OccupiedHolderInfo)
+                    {
+                        GameObject character = kvp.Value;
+                        if (character != null)
+                        {
+                            var characterManager = character.GetComponent<PlacedCharacter>();
+                            if (characterManager != null)
+                            {
+                                characterManager.Die();
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var enemy in ropeManager.AliveEnemies)
+                    {
+                        if (enemy != null)
+                        {
+                            var enemyManager = enemy.GetComponent<PlacedEnemy>();
+                            if (enemyManager != null)
+                            {
+                                enemyManager.Die();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // フェードアウト処理
         SpriteRenderer[] allRenderers = GetComponentsInChildren<SpriteRenderer>();
-        
+
         if (allRenderers.Length > 0)
         {
-            // 全てのSpriteRendererを同時にフェードアウトさせる
             foreach (var renderer in allRenderers)
             {
                 renderer.DOFade(0, fadeOutDuration * Time.timeScale);
             }
-            
-            // アニメーション完了後にGameObjectを破棄する
-            // （いずれか一つのDOFadeにOnCompleteを追加すればOK）
+
             allRenderers[0].DOFade(0, fadeOutDuration * Time.timeScale).OnComplete(() =>
             {
                 Destroy(gameObject);
@@ -113,13 +160,12 @@ public class RopeCountManager : MonoBehaviour
         }
         else
         {
-            // レンダラーがない場合は即座に破棄
             Destroy(gameObject);
         }
     }
 
     /// <summary>
-    /// ゲーム開始時などに外部から呼び出し、カウントをリセットします。
+    /// ゲーム開始時などに外部から呼び出し、ロープのカウントをリセットします。
     /// </summary>
     public static void ResetCounts()
     {

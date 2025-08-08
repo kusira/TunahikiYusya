@@ -479,3 +479,4 @@ MonoBehaviour:
   appearDuration: 0.2
   appearMoveDistance: 50
   baseOrthographicSize: 5
+  isStaticScale: 0

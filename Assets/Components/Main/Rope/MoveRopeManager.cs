@@ -9,8 +9,8 @@ public class MoveRopeManager : MonoBehaviour
     [Tooltip("シーン内のRopeManagerをアサインしてください")]
     [SerializeField] private RopeManager ropeManager;
 
-    [Tooltip("シーン内のBattleBeginsManagerをアサインしてください")]
-    [SerializeField] private BattleBeginsManager battleBeginsManager;
+    // ★変更: Inspectorでのアサインが不要になったため、SerializeField属性を削除
+    private BattleBeginsManager battleBeginsManager;
 
     [Tooltip("実際に移動させるロープのTransformをアサインしてください")]
     [SerializeField] private Transform ropeTransform;
@@ -18,6 +18,19 @@ public class MoveRopeManager : MonoBehaviour
     [Header("移動設定")]
     [Tooltip("力の差に掛ける移動速度の係数")]
     [SerializeField] private float moveSpeedMultiplier = 0.1f;
+
+    // ★追加: Awakeメソッドでコンポーネントを自動検索
+    void Awake()
+    {
+        // シーン内からBattleBeginsManagerを検索して取得する
+        battleBeginsManager = FindAnyObjectByType<BattleBeginsManager>();
+        
+        // もし見つからなかった場合は、エラーログを出力して知らせる
+        if (battleBeginsManager == null)
+        {
+            Debug.LogError("シーン内に BattleBeginsManager が見つかりませんでした！");
+        }
+    }
 
     void Update()
     {
