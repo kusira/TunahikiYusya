@@ -31,6 +31,10 @@ public class CharacterDataEntry
     [Tooltip("ポップアップなどで実際に表示される名前。空欄の場合はcharacterNameが使用されます。")]
     public string displayName;
 
+    // ★追加: キャラクターの画像（スプライト）
+    [Tooltip("キャラクターの画像（スプライト）。ポップアップや説明画面で表示されます。")]
+    public Sprite characterSprite;
+
     [Tooltip("レベル1から順にステータスを設定します (Element 0 = Lv1, Element 1 = Lv2, ...)")]
     public List<CharacterLevelStats> levelStats = new List<CharacterLevelStats>();
 }
