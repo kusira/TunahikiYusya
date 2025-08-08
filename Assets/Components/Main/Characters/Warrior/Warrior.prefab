@@ -475,7 +475,7 @@ MonoBehaviour:
   characterName: warrior
   isEnemy: 0
   popupPrefab: {fileID: 0}
-  popupYOffset: 1
+  popupYOffset: 1.7
   popupMagnification: 1.1
   appearDuration: 0.2
   appearMoveDistance: 50

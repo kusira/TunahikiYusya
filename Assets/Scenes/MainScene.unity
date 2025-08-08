@@ -3765,7 +3765,7 @@ MonoBehaviour:
     cardPrefab: {fileID: 2547187412039595564, guid: 4ffbfb65ea2e8584ba1a8ca548388373, type: 3}
   - cardName: golem
     cardPrefab: {fileID: 7151352421001882222, guid: 2d4ad1d73a4318e4a8c685415d63fda2, type: 3}
-  startX: -7.5
+  startX: -7
   startY: -3.9
   spacingX: 2.1
 --- !u!1 &1842229607
@@ -4447,6 +4447,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 620880501792246791, guid: 056dd864d67ef2b48a06361f01f81d3d, type: 3}
+      propertyPath: cardRegistry.Array.data[1].cardData.count
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 620880501792246791, guid: 056dd864d67ef2b48a06361f01f81d3d, type: 3}
+      propertyPath: cardRegistry.Array.data[2].cardData.count
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 620880501792246791, guid: 056dd864d67ef2b48a06361f01f81d3d, type: 3}
+      propertyPath: cardRegistry.Array.data[3].cardData.count
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 620880501792246791, guid: 056dd864d67ef2b48a06361f01f81d3d, type: 3}
+      propertyPath: cardRegistry.Array.data[4].cardData.count
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 620880501792246791, guid: 056dd864d67ef2b48a06361f01f81d3d, type: 3}
+      propertyPath: cardRegistry.Array.data[5].cardData.count
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2131303540898744771, guid: 056dd864d67ef2b48a06361f01f81d3d, type: 3}
       propertyPath: m_Name
       value: CardDatabase
@@ -4519,6 +4539,10 @@ PrefabInstance:
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[2].displayName
       value: "\u50E7\u4FB6"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
+      propertyPath: characters.Array.data[3].displayName
+      value: "\u6226\u58EB"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[4].displayName
@@ -4766,7 +4790,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[3].levelStats.Array.data[0].skillDescription
-      value: warrior
+      value: "\u5473\u65B9\u304C3\u4EBA\u4EE5\u4E0A\u306E\u6642\u3001<color=#FFCA28>ATK\xD71.5\u306E\u30D0\u30D5</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[3].levelStats.Array.data[1].hasCooldownSkill
@@ -4774,7 +4798,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[3].levelStats.Array.data[1].skillDescription
-      value: warrior
+      value: "\u5473\u65B9\u304C3\u4EBA\u4EE5\u4E0A\u306E\u6642\u3001<color=#FFCA28>ATK\xD71.5\u306E\u30D0\u30D5</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[3].levelStats.Array.data[2].hasCooldownSkill
@@ -4782,7 +4806,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[3].levelStats.Array.data[2].skillDescription
-      value: warrior
+      value: "\u5473\u65B9\u304C3\u4EBA\u4EE5\u4E0A\u306E\u6642\u3001<color=#FFCA28>ATK\xD71.5\u306E\u30D0\u30D5</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[4].levelStats.Array.data[0].skillDescription

@@ -139,7 +139,7 @@ MonoBehaviour:
   popupYOffset: 1.7
   popupMagnification: 1.1
   appearDuration: 0.2
-  appearMoveDistance: 0.5
+  appearMoveDistance: 50
   baseOrthographicSize: 5
 --- !u!61 &1751621233392852691
 BoxCollider2D:

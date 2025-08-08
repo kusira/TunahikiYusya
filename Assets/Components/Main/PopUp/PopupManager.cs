@@ -4,8 +4,8 @@ using DG.Tweening;
 using TMPro;
 
 /// <summary>
-/// 【最終版】オブジェクトを右クリックでステータスポップアップを表示します。
-/// カメラの拡大率にリアルタイムで対応し、データベースに設定された表示名（DisplayName）を使用します。
+/// 【最終版 v4】オブジェクトを右クリックでステータスポップアップを表示します。
+/// isStaticScaleで、カメラズーム時の挙動（常にサイズ一定 or ワールドサイズ一定）を切り替えられます。
 /// </summary>
 public class PopupManager : MonoBehaviour
 {
@@ -26,6 +26,8 @@ public class PopupManager : MonoBehaviour
     [Header("カメラ設定")]
     [Tooltip("ポップアップのスケールが1.0になる、カメラの基準Orthographic Size")]
     [SerializeField] private float baseOrthographicSize = 5.0f;
+    [Tooltip("trueにすると、カメラの拡大率に関わらず画面上のポップアップの大きさが常に一定になります。")]
+    [SerializeField] private bool isStaticScale = false;
 
     // --- データベース参照 ---
     private CharacterDatabase _characterDatabase;
@@ -37,6 +39,10 @@ public class PopupManager : MonoBehaviour
     private Camera _mainCamera;
     private Transform _popupParentTransform;
     private RectTransform _popupRectTransform;
+    
+    private Vector3 _initialCameraPosition;
+    private float _initialOrthographicSize;
+
 
     void Awake()
     {
@@ -55,7 +61,6 @@ public class PopupManager : MonoBehaviour
             Debug.LogWarning("ポップアップの親となる 'PopUpManager' という名前のGameObjectが見つかりません！", this);
         }
 
-        // シーン内の各データベースを自動で取得
         _characterDatabase = FindAnyObjectByType<CharacterDatabase>();
         _enemyDatabase = FindAnyObjectByType<EnemyDatabase>();
         _cardDatabase = FindAnyObjectByType<CardDatabase>();
@@ -65,7 +70,7 @@ public class PopupManager : MonoBehaviour
     {
         if (Mouse.current == null || _mainCamera == null) return;
 
-        // --- 右クリック押下でポップアップ表示 ---
+        // --- クリック処理 ---
         if (Mouse.current.rightButton.wasPressedThisFrame)
         {
             RaycastHit2D hit = Physics2D.Raycast(_mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero);
@@ -75,26 +80,34 @@ public class PopupManager : MonoBehaviour
             }
         }
 
-        // --- 右クリック解放でポップアップ非表示 ---
         if (Mouse.current.rightButton.wasReleasedThisFrame)
         {
             HidePopup();
         }
         
-        // --- ポップアップ表示中にカメラの拡大率をリアルタイムで反映 ---
-        if (_popupInstance != null && _popupRectTransform != null)
+        if (_popupInstance != null)
         {
-            // 初回のアニメーション中はDOTweenに任せる
-            if (!DOTween.IsTweening(_popupRectTransform))
+            // --- ポップアップを閉じる条件 ---
+            bool cameraMoved = _mainCamera.transform.position != _initialCameraPosition;
+            // isStaticScaleがfalseの時だけ、ズームでも閉じる
+            bool hideOnZoom = !isStaticScale && (_mainCamera.orthographicSize != _initialOrthographicSize);
+
+            if (cameraMoved || hideOnZoom)
             {
-                UpdatePopupScale();
+                HidePopup();
+                return; // 閉じた場合は以降の処理をしない
             }
+
+            // isStaticScaleがtrueの時は、リアルタイムでのスケール追従は不要なため処理を削除
         }
     }
     
     private void ShowPopup()
     {
         if (_popupInstance != null) return;
+
+        _initialCameraPosition = _mainCamera.transform.position;
+        _initialOrthographicSize = _mainCamera.orthographicSize;
         
         _popupInstance = Instantiate(popupPrefab, _popupParentTransform);
         var canvasGroup = _popupInstance.GetComponent<CanvasGroup>();
@@ -136,11 +149,10 @@ public class PopupManager : MonoBehaviour
     {
         if (_popupInstance != null)
         {
-            if(_popupRectTransform != null) DOTween.Kill(_popupRectTransform, true); // アニメーションを安全に停止
-
+            if(_popupRectTransform != null) DOTween.Kill(_popupRectTransform, true);
             Destroy(_popupInstance);
             _popupInstance = null;
-            _popupRectTransform = null; // 参照をクリア
+            _popupRectTransform = null;
         }
     }
 
@@ -150,53 +162,40 @@ public class PopupManager : MonoBehaviour
         {
             var stats = _enemyDatabase.GetStats(characterName);
             if (stats == null) return;
-
-            // DisplayNameが設定されていればそれを、なければ内部名(enemyName)を使用
             nameText.text = !string.IsNullOrEmpty(stats.displayName) ? stats.displayName : stats.enemyName;
-            
             atkValue.text = stats.atk.ToString();
             hpValue.text = stats.hp.ToString();
             skillText.text = stats.skillDescription;
         }
-        else // isCharacter
+        else 
         {
             var deckData = _cardDatabase.GetCardData(characterName);
             if (deckData == null) return;
-
             var characterData = _characterDatabase.GetCharacterData(characterName);
             var stats = _characterDatabase.GetStats(characterName, deckData.level);
-
             if (stats == null || characterData == null) return;
-
-            // DisplayNameが設定されていればそれを、なければ内部名(characterName)を使用
             nameText.text = !string.IsNullOrEmpty(characterData.displayName) ? characterData.displayName : characterData.characterName;
-            
             atkValue.text = stats.atk.ToString();
             hpValue.text = stats.hp.ToString();
             skillText.text = stats.skillDescription;
         }
     }
-
-    /// <summary>
-    /// 現在のカメラ拡大率に応じたポップアップのスケール係数を取得します。
-    /// </summary>
+    
     private float GetCurrentScaleFactor()
     {
+        // ★変更点: isStaticScaleがtrueの時は、常にスケール1.0を返す
+        if (isStaticScale)
+        {
+            return 1.0f;
+        }
+
+        // isStaticScaleがfalseの時のみ、カメラの拡大率に応じた計算を行う
         if (_mainCamera.orthographic)
         {
-            // orthographicSizeが大きい(ズームアウト)ほど、スケールは小さくなる
+            // ワールド空間でのサイズを一定に保つための計算式
             return baseOrthographicSize / _mainCamera.orthographicSize;
         }
+        
         return 1.0f;
-    }
-
-    /// <summary>
-    /// ポップアップのスケールを現在のカメラ拡大率に合わせて更新します。
-    /// </summary>
-    private void UpdatePopupScale()
-    {
-        float scaleFactor = GetCurrentScaleFactor();
-        // アニメーション後の最終的なスケールを適用
-        _popupRectTransform.localScale = Vector3.one * scaleFactor * popupMagnification;
     }
 }

@@ -475,7 +475,7 @@ MonoBehaviour:
   isEnemy: 0
   popupPrefab: {fileID: 9002115370396515497, guid: b86f1df7664bcbf4eb01962470a286cb, type: 3}
   popupYOffset: 1.7
-  popupMagnification: 1.7
+  popupMagnification: 1.1
   appearDuration: 0.2
   appearMoveDistance: 50
   baseOrthographicSize: 5

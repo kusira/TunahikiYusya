@@ -408,6 +408,7 @@ GameObject:
   - component: {fileID: 6232757346654705728}
   - component: {fileID: 8846329026844399477}
   - component: {fileID: 7207743641588204863}
+  - component: {fileID: 2459273461756014105}
   m_Layer: 0
   m_Name: GolemCard
   m_TagString: CharacterCard
@@ -531,6 +532,8 @@ MonoBehaviour:
   - {fileID: -5429458409703527559, guid: dcd1253387b32b74d8e3c6a0ef08025a, type: 3}
   punchAmount: 0.3
   punchDuration: 0.3
+  unlockScaleAmount: 1.2
+  unlockAnimationDuration: 0.5
 --- !u!114 &8846329026844399477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603,3 +606,24 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2459273461756014105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8807723747552556582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ba5bdfe8e9825146b1b2ba5f06f0463, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterName: golem
+  isEnemy: 0
+  popupPrefab: {fileID: 9002115370396515497, guid: b86f1df7664bcbf4eb01962470a286cb, type: 3}
+  popupYOffset: 2.2
+  popupMagnification: 1.7
+  appearDuration: 0.2
+  appearMoveDistance: 50
+  baseOrthographicSize: 5
+  isStaticScale: 1

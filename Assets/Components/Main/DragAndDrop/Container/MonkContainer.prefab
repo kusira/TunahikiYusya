@@ -288,6 +288,7 @@ GameObject:
   - component: {fileID: 8158236204661921857}
   - component: {fileID: 137743577677340168}
   - component: {fileID: 1725308101900573948}
+  - component: {fileID: 1387136464223181729}
   m_Layer: 0
   m_Name: MonkCard
   m_TagString: CharacterCard
@@ -411,6 +412,8 @@ MonoBehaviour:
   - {fileID: -5429458409703527559, guid: dcd1253387b32b74d8e3c6a0ef08025a, type: 3}
   punchAmount: 0.3
   punchDuration: 0.3
+  unlockScaleAmount: 1.2
+  unlockAnimationDuration: 0.5
 --- !u!114 &137743577677340168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -483,6 +486,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1387136464223181729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5517576630646284869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ba5bdfe8e9825146b1b2ba5f06f0463, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterName: monk
+  isEnemy: 0
+  popupPrefab: {fileID: 9002115370396515497, guid: b86f1df7664bcbf4eb01962470a286cb, type: 3}
+  popupYOffset: 2.2
+  popupMagnification: 1.7
+  appearDuration: 0.2
+  appearMoveDistance: 50
+  baseOrthographicSize: 5
+  isStaticScale: 1
 --- !u!1 &6710560712625717876
 GameObject:
   m_ObjectHideFlags: 0
