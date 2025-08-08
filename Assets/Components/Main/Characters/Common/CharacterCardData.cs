@@ -8,14 +8,13 @@ using DG.Tweening;
 public class CharacterCardData : MonoBehaviour
 {
     [Header("カードの基本データ")]
-    // ▼▼▼ 1. CardDatabaseと連携するための名前を追加 ▼▼▼
     [Tooltip("CardDatabaseに登録した名前と完全に一致させること")]
     [SerializeField] private string cardName;
+    public string CardName => cardName; // ← エラー解決に必要な公開プロパティ
 
     [Tooltip("このカードをドラッグした時に生成されるキャラクターのプレハブ")]
     public GameObject characterPrefab;
 
-    // ▼▼▼ Inspectorでの直接編集は不要になりますが、デバッグ用に残します ▼▼▼
     [Tooltip("（実行時にDBから自動設定）カードのレベル")]
     [Range(1, 3)]
     [SerializeField] private int level = 1;
@@ -35,6 +34,12 @@ public class CharacterCardData : MonoBehaviour
     [Header("アニメーション設定")]
     [SerializeField] private float punchAmount = 0.3f;
     [SerializeField] private float punchDuration = 0.3f;
+
+    [Header("アンロックアニメーション設定")]
+    [Tooltip("アンロック時に拡大するスケール")]
+    [SerializeField] private float unlockScaleAmount = 1.2f;
+    [Tooltip("アンロック時のアニメーション時間")]
+    [SerializeField] private float unlockAnimationDuration = 0.5f;
     
     private SpriteRenderer[] allSpriteRenderers;
     private CardAnimationManager cardAnimationManager;
@@ -58,14 +63,8 @@ public class CharacterCardData : MonoBehaviour
             count = Mathf.Clamp(value, 0, 8);
             UpdateCountDisplay();
             
-            if (count == 0 && oldCount > 0)
-            {
-                SetExhaustedState(true);
-            }
-            else if (count > 0 && oldCount == 0)
-            {
-                SetExhaustedState(false);
-            }
+            if (count == 0 && oldCount > 0) SetExhaustedState(true);
+            else if (count > 0 && oldCount == 0) SetExhaustedState(false);
         }
     }
     
@@ -75,7 +74,6 @@ public class CharacterCardData : MonoBehaviour
         cardAnimationManager = GetComponent<CardAnimationManager>();
     }
     
-    // ▼▼▼ 2. Startメソッドをデータベースから読み込む処理に書き換え ▼▼▼
     void Start()
     {
         if (CardDatabase.Instance == null)
@@ -85,18 +83,13 @@ public class CharacterCardData : MonoBehaviour
             return;
         }
 
-        // 自身のcardNameを使って、データベースに情報を問い合わせる
         CardDeckData data = CardDatabase.Instance.GetCardData(cardName);
 
         if (data != null)
         {
-            // プロパティ経由で値を設定（これで表示更新なども自動で行われる）
             this.Level = data.level;
             this.Count = data.count;
-
-            // 起動時に個数が0だった場合に備えて初期状態をチェック
             CheckInitialState();
-            Debug.Log($"カード '{cardName}' のデータをロードしました。Level: {Level}, Count: {Count}");
         }
         else
         {
@@ -124,6 +117,14 @@ public class CharacterCardData : MonoBehaviour
         if (Count <= 0) return;
         Count--;
         AnimatePunch(countDisplayRenderer.transform);
+    }
+
+    public void PlayUnlockAnimation()
+    {
+        transform.localScale = Vector3.zero;
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(transform.DOScale(unlockScaleAmount, unlockAnimationDuration / 2).SetEase(Ease.OutBack));
+        sequence.Append(transform.DOScale(1f, unlockAnimationDuration / 2).SetEase(Ease.InSine));
     }
 
     private void AnimatePunch(Transform targetTransform)
@@ -157,8 +158,7 @@ public class CharacterCardData : MonoBehaviour
     
     private void OnValidate()
     {
-        if (Application.isPlaying) return; // 実行中はOnValidateでの更新を止める
-
+        if (Application.isPlaying) return;
         if (levelDisplayRenderer != null && countDisplayRenderer != null)
         {
             UpdateLevelDisplay();

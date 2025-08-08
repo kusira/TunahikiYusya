@@ -1,10 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System; // Actionを使うために必要
 
-/// <summary>
-/// 【データ定義用】カードのレベルと所持枚数を格納するクラス
-/// </summary>
+// (CardDeckData, CardRegistryEntryクラスは変更なし)
 [System.Serializable]
 public class CardDeckData
 {
@@ -13,43 +12,39 @@ public class CardDeckData
     [Tooltip("カードの現在の所持枚数")]
     public int count = 0;
 }
-
-/// <summary>
-/// 【Inspector表示用】カード名とデータを紐づけるためのクラス
-/// </summary>
 [System.Serializable]
 public class CardRegistryEntry
 {
-    [Tooltip("カードを識別するための名前（CharacterCardDataのcharacterNameと一致させる）")]
+    [Tooltip("カードを識別するための名前")]
     public string cardName;
     public CardDeckData cardData = new CardDeckData();
 }
 
-/// <summary>
-/// 全てのカードのレベルと所持枚数を管理するデータベース。
-/// シーンに一つだけ配置してシングルトンとして機能します。
-/// </summary>
 public class CardDatabase : MonoBehaviour
 {
-    // シーン内のどこからでもアクセスできる静的インスタンス
     public static CardDatabase Instance { get; private set; }
 
+    // ▼▼▼ 1. イベントを追加 ▼▼▼
+    /// <summary>
+    /// カードがアンロックされた時に呼び出されるイベント。
+    /// 引数としてアンロックされたカードの名前(string)を渡します。
+    /// </summary>
+    public static event Action<string> OnCardUnlocked;
+
+
     [Header("カード所持状況リスト")]
-    [Tooltip("ここに所持しているカードの種類、レベル、枚数を登録します")]
     [SerializeField]
     private List<CardRegistryEntry> cardRegistry;
     
-    // ゲーム実行中に高速アクセスするための辞書（Dictionary）
+    public List<string> UnlockedCardOrder { get; private set; }
     private Dictionary<string, CardDeckData> _cardDatabase;
 
     void Awake()
     {
-        // シングルトンパターンの実装
         if (Instance == null)
         {
             Instance = this;
             InitializeDatabase();
-            // DontDestroyOnLoad(gameObject); // シーンをまたいでデータを保持する場合
         }
         else
         {
@@ -57,40 +52,47 @@ public class CardDatabase : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Inspectorで設定されたリストを、実行時用の辞書に変換する
-    /// </summary>
     private void InitializeDatabase()
     {
         _cardDatabase = new Dictionary<string, CardDeckData>();
+        UnlockedCardOrder = new List<string>();
+
         foreach (var entry in cardRegistry)
         {
-            if (string.IsNullOrEmpty(entry.cardName))
-            {
-                Debug.LogWarning("CardDatabaseに名前が設定されていない項目があります。", this);
-                continue;
-            }
-            if (_cardDatabase.ContainsKey(entry.cardName))
-            {
-                Debug.LogWarning($"CardDatabaseに'{entry.cardName}'が重複して登録されています。", this);
-                continue;
-            }
+            if (string.IsNullOrEmpty(entry.cardName) || _cardDatabase.ContainsKey(entry.cardName)) continue;
             _cardDatabase.Add(entry.cardName, entry.cardData);
+
+            if (entry.cardData.count > 0)
+            {
+                UnlockedCardOrder.Add(entry.cardName);
+            }
         }
     }
 
-    /// <summary>
-    /// カード名を指定して、そのカードのレベルと枚数のデータを取得します。
-    /// </summary>
-    /// <param name="cardName">取得したいカードの名前</param>
-    /// <returns>カードのデータ。見つからなければnull。</returns>
+    public void UnlockCard(string cardName)
+    {
+        CardDeckData data = GetCardData(cardName);
+        if (data != null && data.count == 0)
+        {
+            data.count = 1;
+            if (!UnlockedCardOrder.Contains(cardName))
+            {
+                UnlockedCardOrder.Add(cardName);
+                
+                // ▼▼▼ 2. イベントを発火させる ▼▼▼
+                // 登録しているリスナー（CharacterStoreManagerなど）に通知
+                OnCardUnlocked?.Invoke(cardName);
+            }
+            Debug.Log($"カード '{cardName}' がアンロックされました！");
+        }
+    }
+    
     public CardDeckData GetCardData(string cardName)
     {
         if (_cardDatabase.TryGetValue(cardName, out CardDeckData data))
         {
             return data;
         }
-        
         Debug.LogError($"CardDatabaseに'{cardName}'という名前のカードが見つかりません。", this);
         return null;
     }
