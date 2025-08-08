@@ -19,13 +19,6 @@ public class BuffManager : MonoBehaviour
     [Tooltip("アイコンがフェードイン／アウトする速度")]
     [SerializeField] private float alphaFadeSpeed = 10f;
 
-    // ▼▼▼ 1. 点滅エフェクト用の設定項目を追加 ▼▼▼
-    [Header("バフ獲得エフェクト")]
-    [Tooltip("バフ獲得時にキャラクターを点滅させる色")]
-    [SerializeField] private Color buffGainFlashColor = Color.yellow;
-    [Tooltip("バフ獲得時の点滅の合計時間（秒）")]
-    [SerializeField] private float buffGainFlashDuration = 2.0f;
-
     private class Buff
     {
         public string Id { get; }

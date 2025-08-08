@@ -7,11 +7,13 @@ public class PlacedCharacter : MonoBehaviour
 {
     public static int HpToTransfer = -1;
 
-    // (Inspectorで設定する変数は変更ありません)
     #region Serialized Fields
     [Header("キャラクター識別")]
+    [Tooltip("データベースで設定したキャラクター名と完全に一致させる")]
     [SerializeField] private string characterName;
-    [SerializeField] [Range(1, 3)] private int level = 1;
+
+    // レベルはCardDatabaseから自動取得するため、Inspectorでの設定は不要になります
+    // public int Level { get; private set; }
 
     [Header("連携データ")]
     public CharacterCardData SourceCardData { get; set; }
@@ -25,6 +27,7 @@ public class PlacedCharacter : MonoBehaviour
     public bool hasCooldownSkill { get; private set; }
     public float skillCooldownTime { get; private set; }
     public string skill { get; private set; }
+    public int Level { get; private set; } // レベルを保持するプロパティ
 
     [Header("綱引き設定")]
     [SerializeField] private float tugOfWarDamageMultiplier = 0.1f;
@@ -57,7 +60,6 @@ public class PlacedCharacter : MonoBehaviour
 
     public bool IsPaused { get; private set; } = false;
     
-    // (内部変数は変更ありません)
     #region Private Fields
     private CharacterDatabase database;
     private RopeManager ropeManager;
@@ -72,8 +74,7 @@ public class PlacedCharacter : MonoBehaviour
     #endregion
 
     public Vector3 CurrentPosition => transform.position;
-
-    // (Awake, Start, Updateなどの前半部分は変更ありません)
+    
     #region Unity Lifecycle Methods
     void Awake()
     {
@@ -87,10 +88,39 @@ public class PlacedCharacter : MonoBehaviour
 
     void Start()
     {
-        if (database == null) { Debug.LogError("シーンにCharacterDatabaseが見つかりません！", this); return; }
-        CharacterLevelStats stats = database.GetStats(characterName, level);
-        if (stats == null) return;
+        // ▼▼▼ Startメソッドを正しいロジックに修正 ▼▼▼
         
+        // --- 1. CardDatabaseからレベルを取得 ---
+        if (CardDatabase.Instance == null)
+        {
+            Debug.LogError("シーンにCardDatabaseが存在しません！", this);
+            gameObject.SetActive(false);
+            return;
+        }
+        // Inspectorで設定されたcharacterNameを使って、カードのデッキ情報を取得
+        CardDeckData deckData = CardDatabase.Instance.GetCardData(characterName);
+        if (deckData == null)
+        {
+            Debug.LogError($"CardDatabaseに '{characterName}' のデータが見つかりません。オブジェクトを非アクティブ化します。", this);
+            gameObject.SetActive(false);
+            return;
+        }
+        // 取得したレベルをこのキャラクターのレベルとして設定
+        this.Level = deckData.level;
+
+        // --- 2. CharacterDatabaseからステータスを取得 ---
+        if (database == null) { Debug.LogError("シーンにCharacterDatabaseが見つかりません！", this); return; }
+
+        // characterNameと、上記で取得したLevelを使ってステータスを取得
+        CharacterLevelStats stats = database.GetStats(characterName, this.Level);
+        if (stats == null)
+        {
+            Debug.LogError($"CharacterDatabaseに '{characterName}' (Level {this.Level}) のデータが見つかりません。", this);
+            gameObject.SetActive(false);
+            return;
+        }
+
+        // --- 3. ステータスを初期化 ---
         this.maxHp = stats.hp;
         this.baseAtk = stats.atk;
         this.atk = stats.atk;
@@ -108,6 +138,7 @@ public class PlacedCharacter : MonoBehaviour
             this.hp = stats.hp;
         }
 
+        // --- 4. UIゲージを初期化 ---
         if (hpGaugeRenderer != null)
         {
             initialHpGaugeScaleX = hpGaugeRenderer.transform.localScale.x;
@@ -167,7 +198,6 @@ public class PlacedCharacter : MonoBehaviour
     }
     #endregion
 
-    // (TakeDamage, Heal, SetAttackMultiplierなどのメソッドは変更ありません)
     #region Public Gameplay Methods
     public void TakeDamage(int damage)
     {
@@ -231,38 +261,25 @@ public class PlacedCharacter : MonoBehaviour
         IsPaused = false;
         SetRenderersAlpha(1.0f);
     }
-    #endregion
     
-    // ▼▼▼ ここからが今回の修正箇所です ▼▼▼
-
-    /// <summary>
-    /// 【外部API】指定した色と時間でキャラクターを点滅させます。
-    /// </summary>
-    /// <param name="color">点滅させる色</param>
-    /// <param name="duration">点滅の合計時間（秒）</param>
     public void Flash(Color color, float duration)
     {
         if (mainSpriteRenderer == null || duration <= 0) return;
 
         mainSpriteRenderer.DOKill();
-        // 点滅後、元の白色に戻る
         mainSpriteRenderer.DOColor(color, duration / 2).OnComplete(() =>
         {
             mainSpriteRenderer.DOColor(Color.white, duration / 2);
         });
     }
-
-    /// <summary>
-    /// 内部用の点滅処理。高速で繰り返し点滅させます。
-    /// </summary>
+    #endregion
+    
+    #region Private Helper Methods
     private void FlashColor(Color flashColor)
     {
-        // 外部APIとして作成したFlash()メソッドを、
-        // Inspectorで設定したデフォルト値（flashDuration）で呼び出す
         Flash(flashColor, flashDuration);
     }
-
-    #region Private Helper Methods
+    
     private void SetRenderersAlpha(float alpha)
     {
         if (allRenderers == null) return;
@@ -282,9 +299,10 @@ public class PlacedCharacter : MonoBehaviour
         if (isDead) return;
         isDead = true;
 
+        if (mainSpriteRenderer != null) mainSpriteRenderer.DOKill();
+
         if (CurrentHolder != null) CurrentHolder.SetOccupied(false);
         if (boxCollider != null) boxCollider.enabled = false;
-        if (mainSpriteRenderer != null) mainSpriteRenderer.DOKill();
         
         var rb = gameObject.AddComponent<Rigidbody2D>();
         rb.gravityScale = 1.0f;
