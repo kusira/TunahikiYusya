@@ -1292,6 +1292,37 @@ MonoBehaviour:
   maxBounds: {x: 10, y: 11}
   staticObjects:
   - {fileID: 1833443244}
+--- !u!1 &556617236
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 556617237}
+  m_Layer: 0
+  m_Name: PopUpManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &556617237
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556617236}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 884656803}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1800,6 +1831,7 @@ RectTransform:
   - {fileID: 1451580521}
   - {fileID: 1842229608}
   - {fileID: 6088954533890058445}
+  - {fileID: 556617237}
   - {fileID: 503858041}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4477,6 +4509,26 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
+      propertyPath: characters.Array.data[0].displayName
+      value: "\u52C7\u8005"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
+      propertyPath: characters.Array.data[1].displayName
+      value: "\u5F13\u5175"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
+      propertyPath: characters.Array.data[2].displayName
+      value: "\u50E7\u4FB6"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
+      propertyPath: characters.Array.data[4].displayName
+      value: "\u5175\u58EB"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
+      propertyPath: characters.Array.data[5].displayName
+      value: "\u30B4\u30FC\u30EC\u30E0"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[1].characterName
       value: archer
       objectReference: {fileID: 0}
@@ -4650,15 +4702,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[0].levelStats.Array.data[0].skillDescription
-      value: hero
+      value: "\u4F53\u529B\u304C70\uFF05\u4EE5\u4E0A\u306E\u6642\u3001<color=#FFCA28>ATK\xD71.5\u306E\u30D0\u30D5</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[0].levelStats.Array.data[1].skillDescription
-      value: hero
+      value: "\u4F53\u529B\u304C70\uFF05\u4EE5\u4E0A\u306E\u6642\u3001<color=#FFCA28>ATK\xD71.5\u306E\u30D0\u30D5</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[0].levelStats.Array.data[2].skillDescription
-      value: hero
+      value: "\u4F53\u529B\u304C70\uFF05\u4EE5\u4E0A\u306E\u6642\u3001<color=#FFCA28>ATK\xD71.5\u306E\u30D0\u30D5</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[1].levelStats.Array.data[0].hasCooldownSkill
@@ -4666,7 +4718,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[1].levelStats.Array.data[0].skillDescription
-      value: archer
+      value: "<color=#2196F3>3\u79D2\u3054\u3068</color>\u306B\u540C\u3058\u5217\u306E\u6700\u5F8C\u5C3E\u306B<color=#EF5350>ATK\xD75\u653B\u6483</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[1].levelStats.Array.data[1].hasCooldownSkill
@@ -4674,7 +4726,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[1].levelStats.Array.data[1].skillDescription
-      value: hero_lv2
+      value: "<color=#2196F3>3\u79D2\u3054\u3068</color>\u306B\u540C\u3058\u5217\u306E\u6700\u5F8C\u5C3E\u306B<color=#EF5350>ATK\xD75\u653B\u6483</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[1].levelStats.Array.data[2].hasCooldownSkill
@@ -4682,7 +4734,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[1].levelStats.Array.data[2].skillDescription
-      value: hero_lv3
+      value: "<color=#2196F3>3\u79D2\u3054\u3068</color>\u306B\u540C\u3058\u5217\u306E\u6700\u5F8C\u5C3E\u306B<color=#EF5350>ATK\xD75\u653B\u6483</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[2].levelStats.Array.data[0].hasCooldownSkill
@@ -4690,7 +4742,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[2].levelStats.Array.data[0].skillDescription
-      value: monk
+      value: "<color=#2196F3>5\u79D2\u3054\u3068</color>\u306B\u5168\u4F53\u3092<color=#66BB6A>ATK\xD75\u56DE\u5FA9</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[2].levelStats.Array.data[1].hasCooldownSkill
@@ -4698,7 +4750,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[2].levelStats.Array.data[1].skillDescription
-      value: monk
+      value: "<color=#2196F3>5\u79D2\u3054\u3068</color>\u306B\u5168\u4F53\u3092<color=#66BB6A>ATK\xD75\u56DE\u5FA9</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[2].levelStats.Array.data[2].hasCooldownSkill
@@ -4706,7 +4758,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[2].levelStats.Array.data[2].skillDescription
-      value: monk
+      value: "<color=#2196F3>5\u79D2\u3054\u3068</color>\u306B\u5168\u4F53\u3092<color=#66BB6A>ATK\xD75\u56DE\u5FA9</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[3].levelStats.Array.data[0].hasCooldownSkill
@@ -4734,15 +4786,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[4].levelStats.Array.data[0].skillDescription
-      value: warrior
+      value: "\u30B9\u30AD\u30EB\u306A\u3057"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[4].levelStats.Array.data[1].skillDescription
-      value: warrior
+      value: "\u30B9\u30AD\u30EB\u306A\u3057"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[4].levelStats.Array.data[2].skillDescription
-      value: warrior
+      value: "\u30B9\u30AD\u30EB\u306A\u3057"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[5].levelStats.Array.data[0].hasCooldownSkill
@@ -4750,7 +4802,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[5].levelStats.Array.data[0].skillDescription
-      value: golem
+      value: "<color=#2196F3>6\u79D2\u3054\u3068</color>\u306B\u6700\u524D\u5217\u306B<color=#EF5350>ATK\xD75\u653B\u6483</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[5].levelStats.Array.data[1].hasCooldownSkill
@@ -4758,7 +4810,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[5].levelStats.Array.data[1].skillDescription
-      value: golem
+      value: "<color=#2196F3>6\u79D2\u3054\u3068</color>\u306B\u6700\u524D\u5217\u306B<color=#EF5350>ATK\xD75\u653B\u6483</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[5].levelStats.Array.data[2].hasCooldownSkill
@@ -4766,7 +4818,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[5].levelStats.Array.data[2].skillDescription
-      value: golem
+      value: "<color=#2196F3>6\u79D2\u3054\u3068</color>\u306B\u6700\u524D\u5217\u306B<color=#EF5350>ATK\xD75\u653B\u6483</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4584478020677387787, guid: 71434d3d26a8d6d41a154cfae13ba18d, type: 3}
       propertyPath: characters.Array.data[1].levelStats.Array.data[0].skillCooldownTime
@@ -5176,8 +5228,40 @@ PrefabInstance:
       value: healer
       objectReference: {fileID: 0}
     - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
+      propertyPath: enemies.Array.data[0].displayName
+      value: "\u30B9\u30E9\u30A4\u30E0"
+      objectReference: {fileID: 0}
+    - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
+      propertyPath: enemies.Array.data[1].displayName
+      value: "\u30B4\u30D6\u30EA\u30F3"
+      objectReference: {fileID: 0}
+    - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
+      propertyPath: enemies.Array.data[2].displayName
+      value: "\u30DF\u30CE\u30BF\u30A6\u30ED\u30B9"
+      objectReference: {fileID: 0}
+    - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
+      propertyPath: enemies.Array.data[3].displayName
+      value: "\u30D2\u30FC\u30E9\u30FC"
+      objectReference: {fileID: 0}
+    - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
+      propertyPath: enemies.Array.data[4].displayName
+      value: "\u30C9\u30E9\u30B4\u30F3"
+      objectReference: {fileID: 0}
+    - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
+      propertyPath: enemies.Array.data[5].displayName
+      value: "\u60AA\u9B54"
+      objectReference: {fileID: 0}
+    - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
+      propertyPath: enemies.Array.data[0].skillDescription
+      value: "\u30B9\u30AD\u30EB\u306A\u3057"
+      objectReference: {fileID: 0}
+    - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
       propertyPath: enemies.Array.data[1].hasCooldownSkill
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
+      propertyPath: enemies.Array.data[1].skillDescription
+      value: "<color=#2196F3>3\u79D2\u3054\u3068</color>\u306B\u6700\u524D\u7DDA\u306B<color=#EF5350>ATK\xD72\u30C0\u30E1\u30FC\u30B8</color>"
       objectReference: {fileID: 0}
     - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
       propertyPath: enemies.Array.data[2].hasCooldownSkill
@@ -5185,7 +5269,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
       propertyPath: enemies.Array.data[2].skillDescription
-      value: minotaur
+      value: "<color=#2196F3>5\u79D2\u3054\u3068</color>\u306B\u6700\u524D\u7DDA\u306B<color=#EF5350>ATK\xD73\u30C0\u30E1\u30FC\u30B8</color>"
       objectReference: {fileID: 0}
     - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
       propertyPath: enemies.Array.data[3].hasCooldownSkill
@@ -5193,7 +5277,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
       propertyPath: enemies.Array.data[3].skillDescription
-      value: healer
+      value: "<color=#2196F3>5\u79D2\u3054\u3068</color>\u306B\u5168\u4F53\u3092<color=#66BB6A>ATK\xD75\u56DE\u5FA9</color>"
       objectReference: {fileID: 0}
     - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
       propertyPath: enemies.Array.data[4].hasCooldownSkill
@@ -5201,7 +5285,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
       propertyPath: enemies.Array.data[4].skillDescription
-      value: dragon
+      value: "<color=#2196F3>6\u79D2\u3054\u3068</color>\u306B\u5168\u4F53\u3092<color=#EF5350>ATK\xD72\u653B\u6483</color>"
       objectReference: {fileID: 0}
     - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
       propertyPath: enemies.Array.data[5].hasCooldownSkill
@@ -5209,7 +5293,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
       propertyPath: enemies.Array.data[5].skillDescription
-      value: demon
+      value: "<color=#2196F3>5\u79D2\u3054\u3068</color>\u306B<color=#66BB6A>\u5168\u4F53\u56DE\u5FA9</color>\u3001<color=#EF5350>\u30E9\u30F3\u30C0\u30E0\u5358\u4F53\u653B\u6483</color>\u3001<color=#EF5350>\u5168\u4F53\u653B\u6483</color>\u304C\u30E9\u30F3\u30C0\u30E0\u3067\u767A\u52D5"
       objectReference: {fileID: 0}
     - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
       propertyPath: enemies.Array.data[1].skillCooldownTime
@@ -5225,7 +5309,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
       propertyPath: enemies.Array.data[4].skillCooldownTime
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -7148086193877614950, guid: f385668d7894a3b49888edcbb33af6b8, type: 3}
       propertyPath: enemies.Array.data[5].skillCooldownTime

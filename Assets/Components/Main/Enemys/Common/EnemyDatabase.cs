@@ -10,6 +10,10 @@ public class EnemyDataEntry
 {
     [Tooltip("敵の名前。敵を識別するために使用します。")]
     public string enemyName;
+
+    // ★追加: ポップアップなどで実際に表示される名前
+    [Tooltip("ポップアップなどで実際に表示される名前。空欄の場合はenemyNameが使用されます。")]
+    public string displayName;
     
     [Header("基本ステータス")]
     public int hp = 10;
