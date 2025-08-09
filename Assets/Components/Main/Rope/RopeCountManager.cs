@@ -32,6 +32,7 @@ public class RopeCountManager : MonoBehaviour
 
     void Start()
     {
+        ResetCounts();
         // シーンからUIオブジェクトを名前で検索し、コンポーネントを取得
         var alliedCountObject = GameObject.Find("AlliedRopeCount");
         if (alliedCountObject != null)

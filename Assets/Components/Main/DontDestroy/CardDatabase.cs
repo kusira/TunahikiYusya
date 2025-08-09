@@ -97,4 +97,51 @@ public class CardDatabase : MonoBehaviour
         Debug.LogError($"CardDatabaseに'{cardName}'という名前のカードが見つかりません。", this);
         return null;
     }
+
+    /// <summary>
+    /// 初期状態にリセットします。
+    /// soldier / archer / monk の level=1, count=1、それ以外は level=1, count=0。
+    /// UnlockedCardOrder は soldier → archer → monk の順に再構築します。
+    /// </summary>
+    public void ResetToDefaults()
+    {
+        if (_cardDatabase == null || cardRegistry == null)
+        {
+            InitializeDatabase();
+        }
+
+        string[] initialNames = new[] { "soldier", "archer", "monk" };
+        var initialSet = new HashSet<string>(initialNames);
+
+        // 全カードを初期化
+        foreach (var entry in cardRegistry)
+        {
+            if (entry == null || string.IsNullOrEmpty(entry.cardName) || entry.cardData == null) continue;
+            entry.cardData.level = 1;
+            entry.cardData.count = initialSet.Contains(entry.cardName) ? 1 : 0;
+
+            // 辞書にも反映（参照同一のため不要だが念のため）
+            if (_cardDatabase.ContainsKey(entry.cardName))
+            {
+                _cardDatabase[entry.cardName] = entry.cardData;
+            }
+            else
+            {
+                _cardDatabase.Add(entry.cardName, entry.cardData);
+            }
+        }
+
+        // アンロック順を soldier → archer → monk の順で再構築
+        var newOrder = new List<string>();
+        foreach (var name in initialNames)
+        {
+            if (_cardDatabase.TryGetValue(name, out var data) && data != null && data.count > 0)
+            {
+                newOrder.Add(name);
+            }
+        }
+        UnlockedCardOrder = newOrder;
+
+        Debug.Log("CardDatabase: ResetToDefaults を実行しました (soldier, archer, monk を初期アンロック)。", this);
+    }
 }

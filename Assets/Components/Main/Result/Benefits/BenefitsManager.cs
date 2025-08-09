@@ -8,11 +8,6 @@ using System.Collections;
 
 public class BenefitsManager : MonoBehaviour
 {
-    [Header("テキスト表示")]
-    [SerializeField] private TMP_Text benefitsText;
-    [SerializeField] private float textFadeDuration = 0.25f;
-    [SerializeField] private float textMoveY = 20f; // 少し下から表示
-
     [Header("生成するPrefab")]
     [SerializeField] private GameObject addPanelPrefab;      // AddPanelManage を持つ
     [SerializeField] private GameObject levelUpPanelPrefab;  // LevelUpPanelManager を持つ
@@ -57,7 +52,6 @@ public class BenefitsManager : MonoBehaviour
     // 入口: 外部から呼ぶ
     public void Show()
     {
-        AnimateText();
         spawnedPanels.Clear();
 
         // 抽選のためのデータ準備
@@ -261,7 +255,7 @@ public class BenefitsManager : MonoBehaviour
                 rt.anchoredPosition = new Vector2(x, spawnY);
             }
 
-            var add = go.GetComponent<AddPanelManage>();
+            var add = go.GetComponent<AddPanelManager>();
             var lv  = go.GetComponent<LevelUpPanelManager>();
             var ul  = go.GetComponent<UnlockPanelManager>();
 
@@ -296,7 +290,7 @@ public class BenefitsManager : MonoBehaviour
         foreach (var p in spawnedPanels)
         {
             if (p == null || p == selected) continue;
-            if (p is AddPanelManage a) a.HideAsOther(othersMoveDistance, othersFadeDuration);
+            if (p is AddPanelManager a) a.HideAsOther(othersMoveDistance, othersFadeDuration);
             else if (p is LevelUpPanelManager l) l.HideAsOther(othersMoveDistance, othersFadeDuration);
             else if (p is UnlockPanelManager u) u.HideAsOther(othersMoveDistance, othersFadeDuration);
         }
@@ -330,21 +324,4 @@ public class BenefitsManager : MonoBehaviour
         else Debug.LogError("TransitionManager が見つかりません。", this);
     }
 
-    private void AnimateText()
-    {
-        if (benefitsText == null) return;
-
-        var rt = benefitsText.GetComponent<RectTransform>();
-        if (rt == null) return;
-
-        Color c = benefitsText.color;
-        c.a = 0f;
-        benefitsText.color = c;
-
-        Vector2 orig = rt.anchoredPosition;
-        rt.anchoredPosition = new Vector2(orig.x, orig.y - textMoveY);
-
-        benefitsText.DOFade(1f, textFadeDuration);
-        rt.DOAnchorPosY(orig.y, textFadeDuration).SetEase(Ease.OutQuad);
-    }
 }

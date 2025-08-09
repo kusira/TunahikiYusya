@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 
-public class AddPanelManage : MonoBehaviour
+public class AddPanelManager : MonoBehaviour
 {
     [Header("アニメーション設定")]
     [Tooltip("フェードする時間")]
@@ -105,7 +105,7 @@ public class AddPanelManage : MonoBehaviour
             Name.text = string.IsNullOrEmpty(cdata.displayName) ? cdata.characterName : cdata.displayName;
 
         if (CurrCount != null) CurrCount.text = deck.count.ToString();
-        if (NextCount != null) NextCount.text = (deck.count + 2).ToString();
+        if (NextCount != null) NextCount.text = (deck.count + 1).ToString();
 
         int lvl = Mathf.Max(1, deck.level);
         var stats = characterDatabase.GetStats(characterName, lvl);
@@ -184,7 +184,7 @@ public class AddPanelManage : MonoBehaviour
         var deck = cardDatabase.GetCardData(characterName);
         if (deck == null) return;
 
-        deck.count = Mathf.Max(0, deck.count) + 2;
+        deck.count = Mathf.Max(0, deck.count) + 1;
     }
 
     public void HideSelectedUp()

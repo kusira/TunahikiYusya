@@ -616,7 +616,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf022ddf87da88747801ccf21e19d20c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleBeginsManager: {fileID: 0}
   characterHolderBlue: {fileID: 8970493586616689177, guid: 58d12446b64a57043ab36d0457efc6b8, type: 3}
   characterHolderGreen: {fileID: -7266272602702322266, guid: bbc9194b9e951ba4ab9d2a4acd9a5343, type: 3}
   blueFadeInDuration: 0.25
@@ -943,7 +942,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf022ddf87da88747801ccf21e19d20c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleBeginsManager: {fileID: 0}
   characterHolderBlue: {fileID: 8970493586616689177, guid: 58d12446b64a57043ab36d0457efc6b8, type: 3}
   characterHolderGreen: {fileID: -7266272602702322266, guid: bbc9194b9e951ba4ab9d2a4acd9a5343, type: 3}
   blueFadeInDuration: 0.25
@@ -1096,7 +1094,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf022ddf87da88747801ccf21e19d20c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleBeginsManager: {fileID: 0}
   characterHolderBlue: {fileID: 8970493586616689177, guid: 58d12446b64a57043ab36d0457efc6b8, type: 3}
   characterHolderGreen: {fileID: -7266272602702322266, guid: bbc9194b9e951ba4ab9d2a4acd9a5343, type: 3}
   blueFadeInDuration: 0.25
@@ -1218,9 +1215,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ropeManager: {fileID: 9142026385111816356}
-  battleBeginsManager: {fileID: 0}
   ropeTransform: {fileID: 1234297220608386355}
-  moveSpeedMultiplier: 0.1
+  moveSpeedMultiplier: 0.15
 --- !u!61 &3057902041629419493
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1429,7 +1425,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf022ddf87da88747801ccf21e19d20c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleBeginsManager: {fileID: 0}
   characterHolderBlue: {fileID: 8970493586616689177, guid: 58d12446b64a57043ab36d0457efc6b8, type: 3}
   characterHolderGreen: {fileID: -7266272602702322266, guid: bbc9194b9e951ba4ab9d2a4acd9a5343, type: 3}
   blueFadeInDuration: 0.25
@@ -1582,7 +1577,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf022ddf87da88747801ccf21e19d20c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleBeginsManager: {fileID: 0}
   characterHolderBlue: {fileID: 8970493586616689177, guid: 58d12446b64a57043ab36d0457efc6b8, type: 3}
   characterHolderGreen: {fileID: -7266272602702322266, guid: bbc9194b9e951ba4ab9d2a4acd9a5343, type: 3}
   blueFadeInDuration: 0.25
@@ -1774,7 +1768,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf022ddf87da88747801ccf21e19d20c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleBeginsManager: {fileID: 0}
   characterHolderBlue: {fileID: 8970493586616689177, guid: 58d12446b64a57043ab36d0457efc6b8, type: 3}
   characterHolderGreen: {fileID: -7266272602702322266, guid: bbc9194b9e951ba4ab9d2a4acd9a5343, type: 3}
   blueFadeInDuration: 0.25

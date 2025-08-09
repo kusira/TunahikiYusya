@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 using DG.Tweening;
 using TMPro;
 
@@ -7,7 +8,7 @@ using TMPro;
 /// 【最終版 v4】オブジェクトを右クリックでステータスポップアップを表示します。
 /// isStaticScaleで、カメラズーム時の挙動（常にサイズ一定 or ワールドサイズ一定）を切り替えられます。
 /// </summary>
-public class PopupManager : MonoBehaviour
+public class PopupManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [Header("ポップアップ設定")]
     [Tooltip("表示するキャラクター/敵の名前（データベース上のID名）")]
@@ -51,14 +52,14 @@ public class PopupManager : MonoBehaviour
     
     void Start()
     {
-        GameObject parentGO = GameObject.Find("PopUpManager");
+        GameObject parentGO = GameObject.Find("PopupContainer");
         if (parentGO != null)
         {
             _popupParentTransform = parentGO.transform;
         }
         else
         {
-            Debug.LogWarning("ポップアップの親となる 'PopUpManager' という名前のGameObjectが見つかりません！", this);
+            Debug.LogWarning("ポップアップの親となる 'PopupContainer' という名前のGameObjectが見つかりません！", this);
         }
 
         _characterDatabase = FindAnyObjectByType<CharacterDatabase>();
@@ -68,22 +69,7 @@ public class PopupManager : MonoBehaviour
 
     void Update()
     {
-        if (Mouse.current == null || _mainCamera == null) return;
-
-        // --- クリック処理 ---
-        if (Mouse.current.rightButton.wasPressedThisFrame)
-        {
-            RaycastHit2D hit = Physics2D.Raycast(_mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero);
-            if (hit.collider != null && hit.collider.gameObject == this.gameObject)
-            {
-                ShowPopup();
-            }
-        }
-
-        if (Mouse.current.rightButton.wasReleasedThisFrame)
-        {
-            HidePopup();
-        }
+        if (_mainCamera == null) return;
         
         if (_popupInstance != null)
         {
@@ -99,6 +85,22 @@ public class PopupManager : MonoBehaviour
             }
 
             // isStaticScaleがtrueの時は、リアルタイムでのスケール追従は不要なため処理を削除
+        }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            ShowPopup();
+        }
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            HidePopup();
         }
     }
     

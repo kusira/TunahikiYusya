@@ -141,6 +141,9 @@ public class ResultManager : MonoBehaviour
         // リザルトの親オブジェクトを有効化
         resultParent.SetActive(true);
 
+        // リザルト表示に入ったら、全てのPopupManagerを無効化し、既存ポップアップを消去
+        DisableAllPopupManagersAndClearPopups();
+
         // まず TimeScale を 0 にする（以降は非スケールで進行）
         Time.timeScale = 0f;
 
@@ -230,5 +233,28 @@ public class ResultManager : MonoBehaviour
         }
 
         cg.DOFade(1f, duration).SetUpdate(true);
+    }
+
+    /// <summary>
+    /// シーン内の全てのPopupManagerを無効化し、PopupContainer配下の既存ポップアップを削除
+    /// </summary>
+    private void DisableAllPopupManagersAndClearPopups()
+    {
+        var popups = Object.FindObjectsByType<PopupManager>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (var pm in popups)
+        {
+            if (pm != null) pm.enabled = false;
+        }
+
+        var container = GameObject.Find("PopupContainer");
+        if (container != null)
+        {
+            var tr = container.transform;
+            for (int i = tr.childCount - 1; i >= 0; i--)
+            {
+                var child = tr.GetChild(i);
+                if (child != null) Destroy(child.gameObject);
+            }
+        }
     }
 }
