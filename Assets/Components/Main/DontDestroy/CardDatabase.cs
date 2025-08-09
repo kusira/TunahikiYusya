@@ -100,8 +100,8 @@ public class CardDatabase : MonoBehaviour
 
     /// <summary>
     /// 初期状態にリセットします。
-    /// soldier / archer / monk の level=1, count=1、それ以外は level=1, count=0。
-    /// UnlockedCardOrder は soldier → archer → monk の順に再構築します。
+    ///hero / archer / monk の level=1, count=1、それ以外は level=1, count=0。
+    /// UnlockedCardOrder はhero → archer → monk の順に再構築します。
     /// </summary>
     public void ResetToDefaults()
     {
@@ -110,7 +110,7 @@ public class CardDatabase : MonoBehaviour
             InitializeDatabase();
         }
 
-        string[] initialNames = new[] { "soldier", "archer", "monk" };
+        string[] initialNames = new[] { "hero", "archer", "monk" };
         var initialSet = new HashSet<string>(initialNames);
 
         // 全カードを初期化
@@ -131,7 +131,7 @@ public class CardDatabase : MonoBehaviour
             }
         }
 
-        // アンロック順を soldier → archer → monk の順で再構築
+        // アンロック順をhero → archer → monk の順で再構築
         var newOrder = new List<string>();
         foreach (var name in initialNames)
         {
@@ -142,6 +142,6 @@ public class CardDatabase : MonoBehaviour
         }
         UnlockedCardOrder = newOrder;
 
-        Debug.Log("CardDatabase: ResetToDefaults を実行しました (soldier, archer, monk を初期アンロック)。", this);
+        Debug.Log("CardDatabase: ResetToDefaults を実行しました hero, archer, monk を初期アンロック)。", this);
     }
 }

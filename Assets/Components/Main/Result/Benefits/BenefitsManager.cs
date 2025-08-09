@@ -8,6 +8,11 @@ using System.Collections;
 
 public class BenefitsManager : MonoBehaviour
 {
+    [Header("確率調整")]
+    [Tooltip("アンロック出現確率の倍率（例: 1.5 で約1.5倍）")]
+    [SerializeField] private float unlockProbabilityBoost = 1.5f;
+    [Tooltip("増員(Count)の重み低下度合い。大きいほどCountが多いキャラは出にくくなる。1.0〜2.0推奨")]
+    [SerializeField] private float addCountWeightPower = 1.2f;
     [Header("生成するPrefab")]
     [SerializeField] private GameObject addPanelPrefab;      // AddPanelManage を持つ
     [SerializeField] private GameObject levelUpPanelPrefab;  // LevelUpPanelManager を持つ
@@ -79,7 +84,7 @@ public class BenefitsManager : MonoBehaviour
         // 1) アンロックの抽選（確率 = 未解放/全体）
         if (locked.Count > 0)
         {
-            float prob = (float)locked.Count / usable.Count;
+            float prob = Mathf.Min(1f, ((float)locked.Count / Mathf.Max(1, usable.Count)) * Mathf.Max(0f, unlockProbabilityBoost));
             if (Random.value < prob && unlockPanelPrefab != null)
             {
                 string pick = locked[Random.Range(0, locked.Count)];
@@ -97,8 +102,8 @@ public class BenefitsManager : MonoBehaviour
                     var d = cardDb.GetCardData(n);
                     return d != null && d.level > 0 && d.level <= maxLevelForGeneratePanel;
                 }).ToList();
-                name = pool.Count > 0 ? pool[Random.Range(0, pool.Count)] : null;
-                return name != null;
+                name = BenefitsSelectionHelper.WeightedPickByLowLevelCount(pool, cardDb);
+                return !string.IsNullOrEmpty(name);
             }
 
             bool TryPickAdd(out string name)
@@ -108,8 +113,8 @@ public class BenefitsManager : MonoBehaviour
                     var d = cardDb.GetCardData(n);
                     return d != null && d.level > 0 && d.count <= maxCountForGeneratePanel;
                 }).ToList();
-                name = pool.Count > 0 ? pool[Random.Range(0, pool.Count)] : null;
-                return name != null;
+                name = BenefitsSelectionHelper.WeightedPickByCount(pool, cardDb, addCountWeightPower);
+                return !string.IsNullOrEmpty(name);
             }
 
             var types = new List<string> { "LevelUp", "Add" };
@@ -168,7 +173,7 @@ public class BenefitsManager : MonoBehaviour
             {
                 if (t == "Unlock" && locked.Count > 0 && unlockPanelPrefab != null)
                 {
-                    float prob = (float)locked.Count / Mathf.Max(1, usable.Count);
+                    float prob = Mathf.Min(1f, ((float)locked.Count / Mathf.Max(1, usable.Count)) * Mathf.Max(0f, unlockProbabilityBoost));
                     if (Random.value < prob)
                     {
                         string pick = locked[Random.Range(0, locked.Count)];
@@ -190,7 +195,7 @@ public class BenefitsManager : MonoBehaviour
 
                     if (pool.Count > 0)
                     {
-                        string name = pool[Random.Range(0, pool.Count)];
+                        string name = BenefitsSelectionHelper.WeightedPickByLowLevelCount(pool, cardDb);
                         if (NotDupLevelUp(name))
                         {
                             spawnQueue.Add((levelUpPanelPrefab, name));
@@ -209,7 +214,7 @@ public class BenefitsManager : MonoBehaviour
 
                     if (pool.Count > 0)
                     {
-                        string name = pool[Random.Range(0, pool.Count)];
+                        string name = BenefitsSelectionHelper.WeightedPickByCount(pool, cardDb, addCountWeightPower);
                         if (NotDupAdd(name))
                         {
                             spawnQueue.Add((addPanelPrefab, name));
@@ -267,9 +272,46 @@ public class BenefitsManager : MonoBehaviour
             }
             else if (lv != null)
             {
-                spawnedPanels.Add(lv);
-                lv.CharacterName = ch;
-                DOVirtual.DelayedCall(perPanelDelay * order, () => lv.Show());
+                // ここで再確認: 本当にアンロックされているか？
+                var data = cardDb.GetCardData(ch);
+                bool isUnlocked = (data != null && Mathf.Max(0, data.level) > 0);
+
+                if (!isUnlocked)
+                {
+                    // レベルアップではなくアンロックに差し替え
+                    Destroy(go);
+                    if (unlockPanelPrefab != null)
+                    {
+                        var go2 = Instantiate(unlockPanelPrefab, transform);
+                        var rt2 = go2.GetComponent<RectTransform>();
+                        if (rt2 != null)
+                        {
+                            float x = Mathf.Lerp(spawnXMin, spawnXMax, tMap[i]);
+                            rt2.anchoredPosition = new Vector2(x, spawnY);
+                        }
+                        var ul2 = go2.GetComponent<UnlockPanelManager>();
+                        if (ul2 != null)
+                        {
+                            spawnedPanels.Add(ul2);
+                            ul2.CharacterName = ch;
+                            DOVirtual.DelayedCall(perPanelDelay * order, () => ul2.Show());
+                        }
+                        else
+                        {
+                            Debug.LogWarning("unlockPanelPrefab から UnlockPanelManager が見つかりません。", go2);
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("unlockPanelPrefab が未設定のため、差し替えできません。", this);
+                    }
+                }
+                else
+                {
+                    spawnedPanels.Add(lv);
+                    lv.CharacterName = ch;
+                    DOVirtual.DelayedCall(perPanelDelay * order, () => lv.Show());
+                }
             }
             else if (ul != null)
             {
@@ -324,4 +366,84 @@ public class BenefitsManager : MonoBehaviour
         else Debug.LogError("TransitionManager が見つかりません。", this);
     }
 
+}
+
+// 低レベル・低カウント優先の重み付き抽選ヘルパー
+internal static class BenefitsSelectionHelper
+{
+    // 出現確率は (level+count)/(合計level+count) の逆数に比例
+    // level+count==0 の場合は個別値を 1 として扱う
+    public static string WeightedPickByLowLevelCount(List<string> candidates, CardDatabase cardDb)
+    {
+        if (candidates == null || candidates.Count == 0 || cardDb == null) return null;
+
+        int total = 0;
+        var perValues = new Dictionary<string, int>(candidates.Count);
+        foreach (var name in candidates)
+        {
+            var d = cardDb.GetCardData(name);
+            int v = 0;
+            if (d != null)
+            {
+                v = Mathf.Max(0, d.level) + Mathf.Max(0, d.count);
+            }
+            total += v;
+            perValues[name] = v;
+        }
+
+        if (total == 0)
+        {
+            return candidates[UnityEngine.Random.Range(0, candidates.Count)];
+        }
+
+        float sumWeights = 0f;
+        var weights = new Dictionary<string, float>(candidates.Count);
+        foreach (var name in candidates)
+        {
+            int v = perValues[name];
+            float w = 1f / Mathf.Max(1, v);
+            weights[name] = w;
+            sumWeights += w;
+        }
+
+        float r = UnityEngine.Random.value * sumWeights;
+        foreach (var name in candidates)
+        {
+            r -= weights[name];
+            if (r <= 0f) return name;
+        }
+        return candidates[candidates.Count - 1];
+    }
+
+    // Count が増えるほど出にくくする重み付き抽選
+    // weight = 1 / pow(max(1, count), power)
+    public static string WeightedPickByCount(List<string> candidates, CardDatabase cardDb, float power)
+    {
+        if (candidates == null || candidates.Count == 0 || cardDb == null) return null;
+        power = Mathf.Max(0.01f, power);
+
+        float sumWeights = 0f;
+        var weights = new Dictionary<string, float>(candidates.Count);
+        foreach (var name in candidates)
+        {
+            var d = cardDb.GetCardData(name);
+            int c = d != null ? Mathf.Max(0, d.count) : 0;
+            float w = 1f / Mathf.Pow(Mathf.Max(1, c), power);
+            weights[name] = w;
+            sumWeights += w;
+        }
+
+        if (sumWeights <= 0f)
+        {
+            return candidates[UnityEngine.Random.Range(0, candidates.Count)];
+        }
+
+        float r = UnityEngine.Random.value * sumWeights;
+        foreach (var name in candidates)
+        {
+            r -= weights[name];
+            if (r <= 0f) return name;
+        }
+        return candidates[candidates.Count - 1];
+    }
 }
