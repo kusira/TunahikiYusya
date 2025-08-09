@@ -29,7 +29,7 @@ public class CharacterHolderManager : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         // シーンから BattleBeginsManager を自動取得
-        battleBeginsManager = FindObjectOfType<BattleBeginsManager>();
+        battleBeginsManager = FindAnyObjectByType<BattleBeginsManager>();
         if (battleBeginsManager == null)
         {
             Debug.LogError("BattleBeginsManager がシーンに見つかりません。");
