@@ -117,7 +117,7 @@ public class CardDatabase : MonoBehaviour
         foreach (var entry in cardRegistry)
         {
             if (entry == null || string.IsNullOrEmpty(entry.cardName) || entry.cardData == null) continue;
-            entry.cardData.level = 1;
+            entry.cardData.level = initialSet.Contains(entry.cardName) ? 1 : 0;
             entry.cardData.count = initialSet.Contains(entry.cardName) ? 1 : 0;
 
             // 辞書にも反映（参照同一のため不要だが念のため）

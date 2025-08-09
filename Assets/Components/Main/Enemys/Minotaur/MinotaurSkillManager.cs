@@ -13,6 +13,7 @@ public class MinotaurSkillManager : MonoBehaviour
     [SerializeField] private float damageMultiplier = 3f;
 
     private PlacedEnemy _placedEnemy;
+    private RopeManager _ropeManager;
 
     void Awake()
     {
@@ -22,72 +23,71 @@ public class MinotaurSkillManager : MonoBehaviour
         {
             Debug.LogError("MinotaurSkillManagerはPlacedEnemyと同じGameObjectにいる必要があります！", this);
         }
+
+        // 自分自身の親の親（Ropeオブジェクト）からRopeManagerを取得（Golemと同様）
+        if (transform.parent != null && transform.parent.parent != null)
+        {
+            _ropeManager = transform.parent.parent.GetComponent<RopeManager>();
+        }
     }
 
     /// <summary>
     /// PlacedEnemyから呼び出される、ミノタウロス専用のスキル処理
     /// </summary>
-    public void ActivateMinotaurSkill()
-    {
-        if (_placedEnemy == null) return;
+    public void ActivateMinotaurSkill()
+    {
+        if (_placedEnemy == null || _ropeManager == null) return;
 
-        // ダメージ量を計算
-        int damage = (int)(_placedEnemy.atk * damageMultiplier);
-        if (damage <= 0) return;
+        int damage = (int)(_placedEnemy.atk * damageMultiplier);
+        if (damage <= 0) return;
 
-        Debug.Log($"<color=red>MINOTAUR SKILL: {_placedEnemy.name}が薙ぎ払いスキルを発動！ (ダメージ: {damage})</color>");
+        Debug.Log($"<color=red>MINOTAUR SKILL: {_placedEnemy.name}が薙ぎ払いスキルを発動！ (ダメージ: {damage})</color>");
 
-        // 1. シーンに存在する全ての味方キャラクターを取得
-        PlacedCharacter[] allAllies = FindObjectsByType<PlacedCharacter>(FindObjectsSortMode.None);
-        if (allAllies.Length == 0)
-        {
-            Debug.Log("攻撃対象の味方が一人もいませんでした。");
-            return;
-        }
+        // 1. 味方が存在する最前列（holderRowsの先頭から）を見つける
+        HolderRow targetRow = null;
+        foreach (var row in _ropeManager.holderRows)
+        {
+            bool leftOccupied  = row.leftHolder  != null && _ropeManager.OccupiedHolderInfo.ContainsKey(row.leftHolder);
+            bool rightOccupied = row.rightHolder != null && _ropeManager.OccupiedHolderInfo.ContainsKey(row.rightHolder);
+            if (leftOccupied || rightOccupied)
+            {
+                targetRow = row;
+                break;
+            }
+        }
 
-        // 2. 左右それぞれのサイドで最もY座標が低い（＝最前列）の味方を探す
-        PlacedCharacter leftFrontAlly = null;
-        PlacedCharacter rightFrontAlly = null;
-        float minLeftY = float.MaxValue;
-        float minRightY = float.MaxValue;
+        if (targetRow == null)
+        {
+            Debug.Log("攻撃対象の味方が見つかりませんでした。");
+            return;
+        }
 
-        foreach (var ally in allAllies)
-        {
-            // キャラクターの親の親（Ropeオブジェクト）を基準に左右を判定
-            Transform axis = ally.transform.parent?.parent;
-            if (axis == null) continue;
+        // 2. 最前列の左右ターゲットを取得
+        GameObject leftGO = null, rightGO = null;
+        if (targetRow.leftHolder != null)
+            _ropeManager.OccupiedHolderInfo.TryGetValue(targetRow.leftHolder, out leftGO);
+        if (targetRow.rightHolder != null)
+            _ropeManager.OccupiedHolderInfo.TryGetValue(targetRow.rightHolder, out rightGO);
 
-            bool isOnLeft = ally.transform.position.x <= axis.position.x;
-            float currentY = ally.transform.position.y;
+        // 3. ダメージ適用（存在する側のみ）
+        if (leftGO != null)
+        {
+            var leftAlly = leftGO.GetComponent<PlacedCharacter>();
+            if (leftAlly != null)
+            {
+                Debug.Log($"  -> 最前列(左)の {leftAlly.name} に {damage} ダメージ！");
+                leftAlly.TakeDamage(damage);
+            }
+        }
 
-            if (isOnLeft)
-            {
-                if (currentY < minLeftY)
-                {
-                    minLeftY = currentY;
-                    leftFrontAlly = ally;
-                }
-            }
-            else // On Right
-            {
-                if (currentY < minRightY)
-                {
-                    minRightY = currentY;
-                    rightFrontAlly = ally;
-                }
-            }
-        }
-
-        // 3. 見つけたターゲットにダメージを与える
-        if (leftFrontAlly != null)
-        {
-            Debug.Log($"  -> 左最前列の {leftFrontAlly.name} に {damage} ダメージ！");
-            leftFrontAlly.TakeDamage(damage);
-        }
-        if (rightFrontAlly != null)
-        {
-            Debug.Log($"  -> 右最前列の {rightFrontAlly.name} に {damage} ダメージ！");
-            rightFrontAlly.TakeDamage(damage);
-        }
-    }
+        if (rightGO != null)
+        {
+            var rightAlly = rightGO.GetComponent<PlacedCharacter>();
+            if (rightAlly != null)
+            {
+                Debug.Log($"  -> 最前列(右)の {rightAlly.name} に {damage} ダメージ！");
+                rightAlly.TakeDamage(damage);
+            }
+        }
+    }
 }

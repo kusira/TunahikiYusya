@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4041454298254363783}
   - component: {fileID: 2827919444196453779}
   - component: {fileID: 7902397088536101902}
-  - component: {fileID: 8924358083863214238}
+  - component: {fileID: 269185633032979967}
   m_Layer: 0
   m_Name: HeroCard
   m_TagString: CharacterCard
@@ -140,6 +140,8 @@ MonoBehaviour:
   punchDuration: 0.3
   unlockScaleAmount: 1.2
   unlockAnimationDuration: 0.5
+  autoSyncFromDB: 1
+  syncInterval: 0.2
 --- !u!114 &2827919444196453779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,7 +214,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8924358083863214238
+--- !u!114 &269185633032979967
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

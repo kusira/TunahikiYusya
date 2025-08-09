@@ -381,7 +381,6 @@ MonoBehaviour:
   damageFlashColor: {r: 1, g: 0, b: 0, a: 1}
   healFlashColor: {r: 0, g: 1, b: 0, a: 1}
   flashDuration: 0.3
-  deathForce: 250
   delayBeforeFade: 1.5
   fadeDuration: 0.5
 --- !u!114 &2705724104845581169
@@ -396,7 +395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86be6b6823ff9cb43b5f29012538f619, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healMultiplier: 5
+  healMultiplier: 7
 --- !u!114 &7964362970237688943
 MonoBehaviour:
   m_ObjectHideFlags: 0

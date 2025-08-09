@@ -288,7 +288,7 @@ GameObject:
   - component: {fileID: 8158236204661921857}
   - component: {fileID: 137743577677340168}
   - component: {fileID: 1725308101900573948}
-  - component: {fileID: 1387136464223181729}
+  - component: {fileID: 2601939601779165692}
   m_Layer: 0
   m_Name: MonkCard
   m_TagString: CharacterCard
@@ -414,6 +414,8 @@ MonoBehaviour:
   punchDuration: 0.3
   unlockScaleAmount: 1.2
   unlockAnimationDuration: 0.5
+  autoSyncFromDB: 1
+  syncInterval: 0.2
 --- !u!114 &137743577677340168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,7 +488,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1387136464223181729
+--- !u!114 &2601939601779165692
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

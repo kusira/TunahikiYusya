@@ -260,6 +260,8 @@ MonoBehaviour:
   punchDuration: 0.3
   unlockScaleAmount: 1.2
   unlockAnimationDuration: 0.5
+  autoSyncFromDB: 1
+  syncInterval: 0.2
 --- !u!114 &5420631312485708976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -347,7 +349,7 @@ MonoBehaviour:
   characterName: warrior
   isEnemy: 0
   popupPrefab: {fileID: 9002115370396515497, guid: b86f1df7664bcbf4eb01962470a286cb, type: 3}
-  popupYOffset: 2.2
+  popupYOffset: 3.2
   popupMagnification: 1.7
   appearDuration: 0.2
   appearMoveDistance: 50

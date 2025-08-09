@@ -70,8 +70,7 @@ public class AddPanelManager : MonoBehaviour
     {
         if (cardDatabase == null || string.IsNullOrEmpty(characterName)) return false;
         var deck = cardDatabase.GetCardData(characterName);
-        if (deck == null) return false;
-        return deck.count > 0;
+        return deck != null; // deck.count > 0 の縛りを外す
     }
 
     public void Show()
@@ -85,8 +84,6 @@ public class AddPanelManager : MonoBehaviour
 
         var deck = cardDatabase.GetCardData(characterName);
         if (deck == null) return;
-
-        if (deck.count == 0) return;
 
         var cdata = characterDatabase.GetCharacterData(characterName);
         if (cdata == null)
