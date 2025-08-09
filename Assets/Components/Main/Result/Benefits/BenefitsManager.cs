@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using System.Collections;
 
 public class BenefitsManager : MonoBehaviour
 {
@@ -37,6 +38,21 @@ public class BenefitsManager : MonoBehaviour
     [SerializeField] private float othersFadeDuration = 0.3f;
 
     private readonly List<MonoBehaviour> spawnedPanels = new List<MonoBehaviour>();
+
+    [Header("トランジション設定")]
+    [SerializeField] private float waitBeforeTransition = 0.5f; // 非スケール秒
+    private bool transitionScheduled = false;
+    [Tooltip("この値以上のステージなら閾値到達扱い")]
+    [SerializeField] private int thresholdStage = 8;
+    [Tooltip("閾値未満のときに遷移するシーン名")]
+    [SerializeField] private string sceneBeforeThreshold = "MainScene";
+    [Tooltip("閾値以上のときに遷移するシーン名")]
+    [SerializeField] private string sceneAtOrBeyondThreshold = "EndScene";
+
+    void Start()
+    {
+        Show();
+    }
 
     // 入口: 外部から呼ぶ
     public void Show()
@@ -280,12 +296,38 @@ public class BenefitsManager : MonoBehaviour
         foreach (var p in spawnedPanels)
         {
             if (p == null || p == selected) continue;
-
             if (p is AddPanelManage a) a.HideAsOther(othersMoveDistance, othersFadeDuration);
             else if (p is LevelUpPanelManager l) l.HideAsOther(othersMoveDistance, othersFadeDuration);
             else if (p is UnlockPanelManager u) u.HideAsOther(othersMoveDistance, othersFadeDuration);
         }
         spawnedPanels.Clear();
+
+        if (!transitionScheduled)
+        {
+            transitionScheduled = true;
+            StartCoroutine(CoTransitionAfterSelection());
+        }
+    }
+
+    private IEnumerator CoTransitionAfterSelection()
+    {
+        // Time.timeScale=0 を想定 → リアルタイム待機
+        yield return new WaitForSecondsRealtime(waitBeforeTransition);
+
+        // ステージ更新（先にインクリメント）と遷移先決定
+        var sm = StageManager.Instance ?? FindAnyObjectByType<StageManager>();
+        int stage = 1;
+        if (sm != null)
+        {
+            sm.IncrementStage();             // 遷移前にインクリメント
+            stage = sm.CurrentStage;
+        }
+        string scene = (stage >= thresholdStage) ? sceneAtOrBeyondThreshold : sceneBeforeThreshold;
+
+        // フェードアウト→シーン遷移
+        var tm = FindAnyObjectByType<TransitionManager>();
+        if (tm != null) tm.PlayFadeOutAndLoad(scene);
+        else Debug.LogError("TransitionManager が見つかりません。", this);
     }
 
     private void AnimateText()

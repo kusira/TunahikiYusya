@@ -52,11 +52,11 @@ public class PanelHoverAnimation : MonoBehaviour, IPointerEnterHandler, IPointer
         KillTween();
         if (rectTransform != null)
         {
-            currentTween = rectTransform.DOScale(target, tweenDuration).SetEase(ease);
+            currentTween = rectTransform.DOScale(target, tweenDuration).SetEase(ease).SetUpdate(true);
         }
         else
         {
-            currentTween = transform.DOScale(target, tweenDuration).SetEase(ease);
+            currentTween = transform.DOScale(target, tweenDuration).SetEase(ease).SetUpdate(true);
         }
     }
 

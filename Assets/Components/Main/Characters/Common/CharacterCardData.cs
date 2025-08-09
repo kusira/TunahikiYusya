@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using DG.Tweening;
+using System.Collections;
 
 /// <summary>
 /// キャラクターカードのデータ。CardDatabaseから情報を取得して初期化されます。
@@ -41,6 +42,13 @@ public class CharacterCardData : MonoBehaviour
     [Tooltip("アンロック時のアニメーション時間")]
     [SerializeField] private float unlockAnimationDuration = 0.5f;
     
+    [Header("リアルタイム同期")]
+    [SerializeField] private bool autoSyncFromDB = true;
+    [SerializeField] private float syncInterval = 0.2f;
+    private Coroutine syncRoutine;
+    private int _lastSyncedLevel = int.MinValue;
+    private int _lastSyncedCount = int.MinValue;
+
     private SpriteRenderer[] allSpriteRenderers;
     private CardAnimationManager cardAnimationManager;
 
@@ -90,6 +98,8 @@ public class CharacterCardData : MonoBehaviour
             this.Level = data.level;
             this.Count = data.count;
             CheckInitialState();
+            _lastSyncedLevel = data.level;
+            _lastSyncedCount = data.count;
         }
         else
         {
@@ -98,6 +108,21 @@ public class CharacterCardData : MonoBehaviour
         }
     }
     
+    void OnEnable()
+    {
+        if (autoSyncFromDB && syncRoutine == null)
+            syncRoutine = StartCoroutine(CoSyncFromDB());
+    }
+
+    void OnDisable()
+    {
+        if (syncRoutine != null)
+        {
+            StopCoroutine(syncRoutine);
+            syncRoutine = null;
+        }
+    }
+
     public void IncreaseLevel()
     {
         if (Level >= 3) return;
@@ -183,6 +208,34 @@ public class CharacterCardData : MonoBehaviour
         if (spriteIndex >= 0 && spriteIndex < countSprites.Count)
         {
             countDisplayRenderer.sprite = countSprites[spriteIndex];
+        }
+    }
+
+    public void RefreshFromDatabase()
+    {
+        if (CardDatabase.Instance == null || string.IsNullOrEmpty(cardName)) return;
+        var data = CardDatabase.Instance.GetCardData(cardName);
+        if (data == null) return;
+
+        if (data.level != _lastSyncedLevel)
+        {
+            this.Level = data.level;
+            _lastSyncedLevel = data.level;
+        }
+        if (data.count != _lastSyncedCount)
+        {
+            this.Count = data.count;
+            _lastSyncedCount = data.count;
+        }
+    }
+
+    private IEnumerator CoSyncFromDB()
+    {
+        var wait = new WaitForSeconds(syncInterval);
+        while (isActiveAndEnabled)
+        {
+            RefreshFromDatabase();
+            yield return wait;
         }
     }
 }

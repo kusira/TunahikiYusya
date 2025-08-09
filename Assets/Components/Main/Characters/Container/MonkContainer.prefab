@@ -605,7 +605,7 @@ GameObject:
   - component: {fileID: 4652168746255305544}
   m_Layer: 0
   m_Name: MonkContainer
-  m_TagString: Untagged
+  m_TagString: CharacterContainer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

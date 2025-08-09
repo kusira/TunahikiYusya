@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using System.Collections.Generic;
 
 /// <summary>
 /// 各ロープにアタッチし、陣地に入った際のカウント処理、UI更新、自身の消滅を管理します。
@@ -54,11 +55,8 @@ public class RopeCountManager : MonoBehaviour
         ropeManager = GetComponent<RopeManager>();
         if (ropeManager == null)
         {
-#if UNITY_2023_1_OR_NEWER
             ropeManager = FindFirstObjectByType<RopeManager>();
-#else
-            ropeManager = FindObjectOfType<RopeManager>();
-#endif
+            ropeManager = FindAnyObjectByType<RopeManager>();
         }
     }
 
@@ -113,31 +111,24 @@ public class RopeCountManager : MonoBehaviour
 
                 if (isAlliedLoser)
                 {
-                    foreach (var kvp in ropeManager.OccupiedHolderInfo)
+                    // OccupiedHolderInfo の値をスナップショットしてから列挙
+                    var characters = new List<GameObject>(ropeManager.OccupiedHolderInfo.Values);
+                    foreach (var character in characters)
                     {
-                        GameObject character = kvp.Value;
-                        if (character != null)
-                        {
-                            var characterManager = character.GetComponent<PlacedCharacter>();
-                            if (characterManager != null)
-                            {
-                                characterManager.Die();
-                            }
-                        }
+                        if (character == null) continue;
+                        var characterManager = character.GetComponent<PlacedCharacter>();
+                        if (characterManager != null) characterManager.Die();
                     }
                 }
                 else
                 {
-                    foreach (var enemy in ropeManager.AliveEnemies)
+                    // AliveEnemies をスナップショットしてから列挙
+                    var enemies = ropeManager.AliveEnemies.ToArray();
+                    foreach (var enemy in enemies)
                     {
-                        if (enemy != null)
-                        {
-                            var enemyManager = enemy.GetComponent<PlacedEnemy>();
-                            if (enemyManager != null)
-                            {
-                                enemyManager.Die();
-                            }
-                        }
+                        if (enemy == null) continue;
+                        var enemyManager = enemy.GetComponent<PlacedEnemy>();
+                        if (enemyManager != null) enemyManager.Die();
                     }
                 }
             }

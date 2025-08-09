@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 
 // ▼▼▼ 1. Inspectorで編集するための専用クラスを追加 ▼▼▼
 /// <summary>
@@ -32,6 +33,13 @@ public class CardStoreManager : MonoBehaviour
     [SerializeField] private float startY = -3.9f;
     [SerializeField] private float spacingX = 2.1f;
 
+    [Header("レイアウト監視設定")]
+    [SerializeField] private float layoutTweenDuration = 0.2f;
+    [SerializeField] private float monitorInterval = 0.2f;
+
+    [Header("監視対象")]
+    [SerializeField] private string targetTag = "CharacterContainer";
+
     // プレハブを名前で高速に検索するための辞書
     private Dictionary<string, GameObject> _cardPrefabDict;
     // 現在ストアに表示されているカードのリスト
@@ -61,11 +69,13 @@ public class CardStoreManager : MonoBehaviour
     void OnEnable()
     {
         CardDatabase.OnCardUnlocked += HandleCardUnlocked;
+        StartCoroutine(CoMonitorLayout());
     }
 
     void OnDisable()
     {
         CardDatabase.OnCardUnlocked -= HandleCardUnlocked;
+        StopAllCoroutines();
     }
 
     void Start()
@@ -85,12 +95,14 @@ public class CardStoreManager : MonoBehaviour
         {
             SpawnAndPlaceCard(cardName, playAnimation: false);
         }
+        RelayoutNow();
     }
 
     private void HandleCardUnlocked(string cardName)
     {
         Debug.Log($"ストアが '{cardName}' のアンロックを検知しました。");
         var newCard = SpawnAndPlaceCard(cardName, playAnimation: true);
+        RelayoutNow();
     }
 
     // ▼▼▼ 4. FindCardPrefabByNameメソッドは不要になったため削除し、このメソッドを修正 ▼▼▼
@@ -103,8 +115,8 @@ public class CardStoreManager : MonoBehaviour
             return null;
         }
         
-        Vector3 spawnPosition = new Vector3(startX + (_spawnedCards.Count * spacingX), startY, 0);
-        GameObject newCardInstance = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity, transform);
+        GameObject newCardInstance = Instantiate(prefabToSpawn, transform);
+        newCardInstance.transform.localPosition = new Vector3(startX + (_spawnedCards.Count * spacingX), startY, 0);
         _spawnedCards.Add(newCardInstance);
 
         if (playAnimation)
@@ -114,5 +126,46 @@ public class CardStoreManager : MonoBehaviour
         }
         
         return newCardInstance;
+    }
+
+    private System.Collections.IEnumerator CoMonitorLayout()
+    {
+        var wait = new WaitForSeconds(monitorInterval);
+        while (isActiveAndEnabled)
+        {
+            CleanupAndSyncList();
+            RelayoutNow();
+            yield return wait;
+        }
+    }
+
+    private void CleanupAndSyncList()
+    {
+        // null を除去
+        _spawnedCards.RemoveAll(go => go == null);
+        // タグ付きの子のみを監視対象として再構築（常に正規化）
+        _spawnedCards = transform.Cast<Transform>()
+                                 .Select(t => t.gameObject)
+                                 .Where(go => go != null && go.CompareTag(targetTag))
+                                 .OrderBy(go => go.transform.localPosition.x)
+                                 .ToList();
+    }
+
+    public void RelayoutNow()
+    {
+        for (int i = 0; i < _spawnedCards.Count; i++)
+        {
+            var go = _spawnedCards[i];
+            if (go == null) continue;
+            if (go == this.gameObject) continue;                 // 自身は対象外
+            if (!go.CompareTag(targetTag)) continue;             // タグ以外は対象外
+            var tr = go.transform;
+            Vector3 targetLocal = new Vector3(startX + (i * spacingX), startY, 0f);
+            if ((tr.localPosition - targetLocal).sqrMagnitude > 0.0001f)
+            {
+                tr.DOKill(false);
+                tr.DOLocalMove(targetLocal, layoutTweenDuration).SetEase(Ease.OutCubic);
+            }
+        }
     }
 }

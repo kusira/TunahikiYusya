@@ -44,6 +44,7 @@ public class CardDatabase : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject); // シーンをまたいでも破棄しない
             InitializeDatabase();
         }
         else

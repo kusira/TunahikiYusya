@@ -90,7 +90,7 @@ public class UnlockPanelManager : MonoBehaviour
         if (!SetPanelData(characterName)) return;
 
         gameObject.SetActive(true);
-        DOVirtual.DelayedCall(displayDelay, AnimateShow);
+        DOVirtual.DelayedCall(displayDelay, AnimateShow).SetUpdate(true);
     }
 
     public void Show(string name)
@@ -140,8 +140,10 @@ public class UnlockPanelManager : MonoBehaviour
     private void AnimateShow()
     {
         isVisible = true;
-        canvasGroup.DOFade(1f, fadeDuration);
-        rectTransform.DOAnchorPosY(rectTransform.anchoredPosition.y + moveYAmount, fadeDuration).SetEase(Ease.OutQuad);
+        canvasGroup.DOFade(1f, fadeDuration).SetUpdate(true);
+        rectTransform.DOAnchorPosY(rectTransform.anchoredPosition.y + moveYAmount, fadeDuration)
+            .SetEase(Ease.OutQuad)
+            .SetUpdate(true);
     }
 
     public void Hide()
@@ -151,10 +153,11 @@ public class UnlockPanelManager : MonoBehaviour
 
         ApplyUnlockToCardDatabase();
 
-        canvasGroup.DOFade(0f, fadeDuration);
+        canvasGroup.DOFade(0f, fadeDuration).SetUpdate(true);
         rectTransform
             .DOAnchorPosY(rectTransform.anchoredPosition.y - moveYAmount, fadeDuration)
             .SetEase(Ease.InQuad)
+            .SetUpdate(true)
             .OnComplete(() =>
             {
                 gameObject.SetActive(false);
@@ -174,14 +177,14 @@ public class UnlockPanelManager : MonoBehaviour
 
     public void HideAsOther(float distance, float duration)
     {
-        Debug.Log("aaa");
         if (!isVisible) return;
         isVisible = false;
 
-        canvasGroup.DOFade(0f, duration);
+        canvasGroup.DOFade(0f, duration).SetUpdate(true);
         rectTransform
             .DOAnchorPosY(rectTransform.anchoredPosition.y - Mathf.Abs(distance), duration)
             .SetEase(Ease.InQuad)
+            .SetUpdate(true)
             .OnComplete(() =>
             {
                 gameObject.SetActive(false);

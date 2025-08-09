@@ -100,7 +100,7 @@ public class LevelUpPanelManager : MonoBehaviour
         if (!SetPanelData(characterName, currentLevel)) return;
 
         gameObject.SetActive(true);
-        DOVirtual.DelayedCall(displayDelay, AnimateShow);
+        DOVirtual.DelayedCall(displayDelay, AnimateShow).SetUpdate(true);
     }
 
     public void Show(string name)
@@ -162,8 +162,8 @@ public class LevelUpPanelManager : MonoBehaviour
     private void AnimateShow()
     {
         isVisible = true;
-        canvasGroup.DOFade(1f, fadeDuration);
-        rectTransform.DOAnchorPosY(rectTransform.anchoredPosition.y + moveYAmount, fadeDuration).SetEase(Ease.OutQuad);
+        canvasGroup.DOFade(1f, fadeDuration).SetUpdate(true);
+        rectTransform.DOAnchorPosY(rectTransform.anchoredPosition.y + moveYAmount, fadeDuration).SetEase(Ease.OutQuad).SetUpdate(true);
     }
 
     public void OnPanelClick()
@@ -182,10 +182,11 @@ public class LevelUpPanelManager : MonoBehaviour
 
         ApplyLevelUpToCardDatabase();
 
-        canvasGroup.DOFade(0f, fadeDuration);
+        canvasGroup.DOFade(0f, fadeDuration).SetUpdate(true);
         rectTransform
             .DOAnchorPosY(rectTransform.anchoredPosition.y - moveYAmount, fadeDuration)
             .SetEase(Ease.InQuad)
+            .SetUpdate(true)
             .OnComplete(() =>
             {
                 Destroy(gameObject);
@@ -197,10 +198,11 @@ public class LevelUpPanelManager : MonoBehaviour
         if (!isVisible) return;
         isVisible = false;
 
-        canvasGroup.DOFade(0f, duration);
+        canvasGroup.DOFade(0f, duration).SetUpdate(true);
         rectTransform
             .DOAnchorPosY(rectTransform.anchoredPosition.y - Mathf.Abs(distance), duration)
             .SetEase(Ease.InQuad)
+            .SetUpdate(true)
             .OnComplete(() => Destroy(gameObject));
     }
 

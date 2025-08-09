@@ -112,7 +112,7 @@ public class AddPanelManage : MonoBehaviour
         if (SkillText != null) SkillText.text = stats != null ? stats.skillDescription : string.Empty;
 
         gameObject.SetActive(true);
-        DOVirtual.DelayedCall(displayDelay, AnimateShow);
+        DOVirtual.DelayedCall(displayDelay, AnimateShow).SetUpdate(true);
     }
 
     public void Show(string name)
@@ -124,18 +124,18 @@ public class AddPanelManage : MonoBehaviour
     private void AnimateShow()
     {
         isVisible = true;
-        canvasGroup.DOFade(1f, fadeDuration);
+        canvasGroup.DOFade(1f, fadeDuration).SetUpdate(true);
         rectTransform.DOAnchorPosY(rectTransform.anchoredPosition.y + moveYAmount, fadeDuration)
-                     .SetEase(Ease.OutQuad);
+                     .SetEase(Ease.OutQuad)
+                     .SetUpdate(true);
     }
 
     public void OnPanelClick()
     {
         var mgr = FindAnyObjectByType<BenefitsManager>();
         if (mgr != null) mgr.OnPanelSelected(this);
-        Hide();
         Selected?.Invoke(this);
-        Hide();
+        HideSelectedUp();
     }
 
     public void Hide()
@@ -145,13 +145,15 @@ public class AddPanelManage : MonoBehaviour
 
         ApplyCountIncrease();
 
-        canvasGroup.DOFade(0f, fadeDuration);
+        canvasGroup.DOFade(0f, fadeDuration).SetUpdate(true);
         rectTransform
             .DOAnchorPosY(rectTransform.anchoredPosition.y - moveYAmount, fadeDuration)
             .SetEase(Ease.InQuad)
+            .SetUpdate(true)
             .OnComplete(() =>
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
+                SetInitialState();
             });
     }
 
@@ -160,11 +162,16 @@ public class AddPanelManage : MonoBehaviour
         if (!isVisible) return;
         isVisible = false;
 
-        canvasGroup.DOFade(0f, duration);
+        canvasGroup.DOFade(0f, duration).SetUpdate(true);
         rectTransform
             .DOAnchorPosY(rectTransform.anchoredPosition.y - Mathf.Abs(distance), duration)
             .SetEase(Ease.InQuad)
-            .OnComplete(() => Destroy(gameObject));
+            .SetUpdate(true)
+            .OnComplete(() =>
+            {
+                gameObject.SetActive(false);
+                Destroy(gameObject);
+            });
     }
 
     private void ApplyCountIncrease()
@@ -180,4 +187,16 @@ public class AddPanelManage : MonoBehaviour
         deck.count = Mathf.Max(0, deck.count) + 2;
     }
 
+    public void HideSelectedUp()
+    {
+        if (!isVisible) return;
+        isVisible = false;
+        ApplyCountIncrease();
+        canvasGroup.DOFade(0f, fadeDuration).SetUpdate(true);
+        rectTransform
+            .DOAnchorPosY(rectTransform.anchoredPosition.y + moveYAmount, fadeDuration)
+            .SetEase(Ease.OutQuad)
+            .SetUpdate(true)
+            .OnComplete(() => Destroy(gameObject));
+    }
 }
