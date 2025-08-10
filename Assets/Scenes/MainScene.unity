@@ -3462,7 +3462,7 @@ MonoBehaviour:
   othersMoveDistance: -80
   othersFadeDuration: 0.3
   waitBeforeTransition: 0.5
-  thresholdStage: 13
+  thresholdStage: 3
   sceneBeforeThreshold: MainScene
   sceneAtOrBeyondThreshold: EndScene
 --- !u!1 &1755312600

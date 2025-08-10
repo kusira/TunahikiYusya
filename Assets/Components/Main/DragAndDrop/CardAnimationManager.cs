@@ -36,12 +36,6 @@ public class CardAnimationManager : MonoBehaviour, IPointerEnterHandler, IPointe
         {
             Debug.LogWarning("CardAnimationManager: 当たり判定用のCollider2Dがこのオブジェクトにアタッチされていません。", this);
         }
-        
-        // EventSystemの存在確認
-        if (FindObjectOfType<EventSystem>() == null)
-        {
-            Debug.LogWarning("CardAnimationManager: シーンにEventSystemが存在しません。ホバー検知が動作しません。", this);
-        }
     }
 
     void OnEnable()

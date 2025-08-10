@@ -41,7 +41,8 @@ public class BenefitsManager : MonoBehaviour
 
     [Header("トランジション設定")]
     [SerializeField] private float waitBeforeTransition = 0.5f; // 非スケール秒
-    private bool transitionScheduled = false;
+
+    // 閾値設定
     [Tooltip("この値以上のステージなら閾値到達扱い")]
     [SerializeField] private int thresholdStage = 8;
     [Tooltip("閾値未満のときに遷移するシーン名")]
@@ -51,7 +52,25 @@ public class BenefitsManager : MonoBehaviour
 
     void Start()
     {
-        Show();
+        // ステージ更新（先にインクリメント）と遷移先決定
+        var sm = StageManager.Instance ?? FindAnyObjectByType<StageManager>();
+        int stage = 1;
+        if (sm != null)
+        {
+            sm.IncrementStage();             // 遷移前にインクリメント
+            stage = sm.CurrentStage;
+        }
+        
+        if(stage >= thresholdStage)
+        {
+            // 閾値以上：報酬は出さない、すぐに待ってからトランジション
+            StartCoroutine(CoScheduleTransition(sceneAtOrBeyondThreshold, waitBeforeTransition));
+        }
+        else
+        {
+            // 閾値未満：報酬を出す
+            Show();
+        }
     }
 
     // 入口: 外部から呼ぶ
@@ -335,37 +354,46 @@ public class BenefitsManager : MonoBehaviour
             if (p is AddPanelManager a) a.HideAsOther(othersMoveDistance, othersFadeDuration);
             else if (p is LevelUpPanelManager l) l.HideAsOther(othersMoveDistance, othersFadeDuration);
             else if (p is UnlockPanelManager u) u.HideAsOther(othersMoveDistance, othersFadeDuration);
+
+            MoveMainScene();
         }
         spawnedPanels.Clear();
-
-        if (!transitionScheduled)
-        {
-            transitionScheduled = true;
-            StartCoroutine(CoTransitionAfterSelection());
-        }
     }
 
-    private IEnumerator CoTransitionAfterSelection()
+    private void MoveEndScene()
     {
-        // Time.timeScale=0 を想定 → リアルタイム待機
-        yield return new WaitForSecondsRealtime(waitBeforeTransition);
+        // EndSceneに遷移する場合は報酬パネルを表示せずに直接遷移
+        Debug.Log("EndSceneへの遷移のため、報酬パネルを表示せずに直接遷移します。");
+        
+        // フェードアウト→シーン遷移
+        var tm = FindAnyObjectByType<TransitionManager>();
+        if (tm != null) tm.PlayFadeOutAndLoad(sceneAtOrBeyondThreshold);
+        else Debug.LogError("TransitionManager が見つかりません。", this);
+    }
 
-        // ステージ更新（先にインクリメント）と遷移先決定
-        var sm = StageManager.Instance ?? FindAnyObjectByType<StageManager>();
-        int stage = 1;
-        if (sm != null)
-        {
-            sm.IncrementStage();             // 遷移前にインクリメント
-            stage = sm.CurrentStage;
-        }
-        string scene = (stage >= thresholdStage) ? sceneAtOrBeyondThreshold : sceneBeforeThreshold;
+    private void MoveMainScene()
+    {
+        // EndSceneに遷移する場合は報酬パネルを表示せずに直接遷移
+        Debug.Log("EndSceneへの遷移のため、報酬パネルを表示せずに直接遷移します。");
+        
+        // フェードアウト→シーン遷移
+        var tm = FindAnyObjectByType<TransitionManager>();
+        if (tm != null) tm.PlayFadeOutAndLoad(sceneBeforeThreshold);
+        else Debug.LogError("TransitionManager が見つかりません。", this);
+    }
+
+
+    // 遅延時間を指定可能な遷移コルーチン
+    private IEnumerator CoScheduleTransition(string scene, float delay = -1f)
+    {
+        float waitTime = delay >= 0f ? delay : waitBeforeTransition;
+        yield return new WaitForSecondsRealtime(waitTime);
 
         // フェードアウト→シーン遷移
         var tm = FindAnyObjectByType<TransitionManager>();
         if (tm != null) tm.PlayFadeOutAndLoad(scene);
         else Debug.LogError("TransitionManager が見つかりません。", this);
     }
-
 }
 
 // 低レベル・低カウント優先の重み付き抽選ヘルパー

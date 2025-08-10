@@ -134,6 +134,21 @@ public class ResultManager : MonoBehaviour
         bool isWin = alliedCount > enemyCount;
         Debug.Log($"判定: 味方 {alliedCount} vs 敵 {enemyCount}。 結果: {(isWin ? "勝利" : "敗北")}");
 
+        // 勝利時に獲得したロープ数をStageManagerに追加
+        if (isWin)
+        {
+            var stageManager = FindAnyObjectByType<StageManager>();
+            if (stageManager != null)
+            {
+                stageManager.AddRope(alliedCount);
+                Debug.Log($"勝利により {alliedCount} 本のロープを獲得しました。現在の総ロープ数: {stageManager.CurrentRopeCount}");
+            }
+            else
+            {
+                Debug.LogWarning("StageManagerが見つかりません。ロープ数の更新をスキップします。", this);
+            }
+        }
+
         // ドラッグ&ドロップを無効化（直接参照）
         var ddm = FindAnyObjectByType<DragAndDropCharacterManager>();
         if (ddm != null) ddm.enabled = false;
