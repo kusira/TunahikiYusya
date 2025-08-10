@@ -5376,12 +5376,12 @@ MonoBehaviour:
   cardRegistry:
   - cardName: hero
     cardData:
-      level: 1
-      count: 1
+      level: 3
+      count: 3
   - cardName: archer
     cardData:
-      level: 1
-      count: 1
+      level: 3
+      count: 3
   - cardName: monk
     cardData:
       level: 1
