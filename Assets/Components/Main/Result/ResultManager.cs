@@ -35,6 +35,9 @@ public class ResultManager : MonoBehaviour
     [Tooltip("敗北時に表示するテキスト")]
     [SerializeField] private TMP_Text loseText;
 
+    [Header("無効化するマネージャー")]
+    // [SerializeField] private MainCameraManager mainCameraManager; // この行を削除
+    
     [Header("アニメーション設定")]
     [Tooltip("終了条件を満たしてからリザルトが表示されるまでの待機時間（秒）")]
     [SerializeField] private float resultDelay = 2.0f;
@@ -153,6 +156,9 @@ public class ResultManager : MonoBehaviour
         var ddm = FindAnyObjectByType<DragAndDropCharacterManager>();
         if (ddm != null) ddm.enabled = false;
 
+        // MoveCameraManagerを無効化
+        DisableMoveCameraManager();
+
         // リザルトの親オブジェクトを有効化
         resultParent.SetActive(true);
 
@@ -270,6 +276,19 @@ public class ResultManager : MonoBehaviour
                 var child = tr.GetChild(i);
                 if (child != null) Destroy(child.gameObject);
             }
+        }
+    }
+
+    /// <summary>
+    /// MainCameraManagerを無効化
+    /// </summary>
+    private void DisableMoveCameraManager()
+    {
+        // FindAnyObjectByTypeでMainCameraManagerを直接探して無効化
+        var mcm = FindAnyObjectByType<MainCameraManager>();
+        if (mcm != null)
+        {
+            mcm.enabled = false;
         }
     }
 }

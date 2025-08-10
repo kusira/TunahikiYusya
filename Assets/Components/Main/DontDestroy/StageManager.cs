@@ -13,6 +13,9 @@ public class StageManager : MonoBehaviour
     
     // 獲得したロープ数を保持
     public int CurrentRopeCount { get; private set; } = 0;
+    
+    // チュートリアル表示フラグ
+    private static bool hasShownTutorial = false;
 
     private void Awake()
     {
@@ -26,6 +29,30 @@ public class StageManager : MonoBehaviour
 
         // 初期化（既に値が入っていれば維持）
         if (CurrentStage <= 0) CurrentStage = Mathf.Max(1, defaultStage);
+    }
+    
+    private void Start()
+    {
+        // 初回起動時のみチュートリアルを表示
+        if (!hasShownTutorial)
+        {
+            ShowTutorial();
+            hasShownTutorial = true;
+        }
+    }
+    
+    private void ShowTutorial()
+    {
+        // TutorialManagerを探してチュートリアルを表示
+        TutorialManager tutorialManager = FindAnyObjectByType<TutorialManager>(FindObjectsInactive.Include);
+        if (tutorialManager != null)
+        {
+            tutorialManager.ShowTutorial();
+        }
+        else
+        {
+            Debug.LogWarning("TutorialManagerが見つかりません。チュートリアルを表示できません。");
+        }
     }
 
     // 外部から発火: ステージを+1
