@@ -2464,6 +2464,11 @@ MonoBehaviour:
   titleButton: {fileID: 501889871}
   replayButton: {fileID: 1191103209}
   xButton: {fileID: 2070395195}
+  hashtags:
+  - '#'
+  - "\u3064\u306A\u3072\u304D\u30ED\u30FC\u30B0"
+  shareUrl: https://unityroom.com/games/tsunahikirogue
+  isGameClear: 0
   pressScale: 0.92
   tweenDuration: 0.12
   pressEase: 6
@@ -3462,7 +3467,7 @@ MonoBehaviour:
   othersMoveDistance: -80
   othersFadeDuration: 0.3
   waitBeforeTransition: 0.5
-  thresholdStage: 3
+  thresholdStage: 13
   sceneBeforeThreshold: MainScene
   sceneAtOrBeyondThreshold: EndScene
 --- !u!1 &1755312600
@@ -4716,7 +4721,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1385696697959782677, guid: c73c70ae08152bd40989109e4cf10da7, type: 3}
       propertyPath: fadeInDelay
-      value: 0.3
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1385696697959782677, guid: c73c70ae08152bd40989109e4cf10da7, type: 3}
       propertyPath: playFadeInOnStart

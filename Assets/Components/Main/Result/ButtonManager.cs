@@ -12,6 +12,11 @@ public class ButtonManager : MonoBehaviour
     [SerializeField] private Image replayButton;  // MainScene へ (リセット付き)
     [SerializeField] private Image xButton;       // X (Twitter) 共有
 
+    [Header("X投稿設定")]
+    [SerializeField] private string[] hashtags = { "#ゲーム", "#Unity" };
+    [SerializeField] private string shareUrl = "https://example.com";
+    [SerializeField] private bool isGameClear = false; // インスペクタで切り替え
+
     [Header("クリックアニメーション")]
     [SerializeField] private float pressScale = 0.92f;
     [SerializeField] private float tweenDuration = 0.12f; // 非スケール秒
@@ -83,7 +88,11 @@ public class ButtonManager : MonoBehaviour
     // --- Click Handlers ---
     private void OnTitleClicked()
     {
+        // TitleScene に移動する前に初期化
+        if (stageManager != null) stageManager.ResetStage();
+        if (cardDatabase != null) cardDatabase.ResetToDefaults();
         LoadSceneWithTransitionOrDirect("TitleScene");
+        Time.timeScale = 1;
     }
 
     private void OnReplayClicked()
@@ -91,16 +100,34 @@ public class ButtonManager : MonoBehaviour
         // MainScene に移動する前に初期化
         if (stageManager != null) stageManager.ResetStage();
         if (cardDatabase != null) cardDatabase.ResetToDefaults();
-
+        Time.timeScale = 1;
         LoadSceneWithTransitionOrDirect("MainScene");
     }
 
     private void OnXClicked()
     {
-        int stage = stageManager != null ? stageManager.CurrentStage : 1;
-        string text = $"CurrentStage: {stage}";
-        string url = "https://twitter.com/intent/tweet?text=" + Uri.EscapeDataString(text);
+        string mainText = GenerateMainText();
+        string hashtagText = string.Join(" ", hashtags);
+        string fullText = $"{mainText}\n{hashtagText}\n\n{shareUrl}";
+        
+        string url = "https://twitter.com/intent/tweet?text=" + Uri.EscapeDataString(fullText);
         Application.OpenURL(url);
+    }
+
+    private string GenerateMainText()
+    {
+        if (isGameClear)
+        {
+            // クリア時：StageManagerからロープ数を取得
+            int ropeCount = stageManager != null ? stageManager.CurrentRopeCount : 0;
+            return $"ゲームクリア！ロープを{ropeCount}本獲得しました！";
+        }
+        else
+        {
+            // 通常時：ステージ数を取得
+            int stage = stageManager != null ? stageManager.CurrentStage : 1;
+            return $"ステージ{stage}まで到達しました！";
+        }
     }
 
     private void LoadSceneWithTransitionOrDirect(string sceneName)

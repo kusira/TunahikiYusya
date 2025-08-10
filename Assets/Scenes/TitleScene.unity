@@ -605,8 +605,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 352621701}
     m_Modifications:
     - target: {fileID: 1385696697959782677, guid: c73c70ae08152bd40989109e4cf10da7, type: 3}
+      propertyPath: fadeInDelay
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1385696697959782677, guid: c73c70ae08152bd40989109e4cf10da7, type: 3}
       propertyPath: playFadeInOnStart
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1385696697959782677, guid: c73c70ae08152bd40989109e4cf10da7, type: 3}
+      propertyPath: transitionDuration
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4414321444354959044, guid: c73c70ae08152bd40989109e4cf10da7, type: 3}
       propertyPath: m_Pivot.x
@@ -998,11 +1006,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1239587088}
   - {fileID: 785740923}
   - {fileID: 1762797585}
   - {fileID: 173798719}
   - {fileID: 1523959728}
-  - {fileID: 1239587088}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1333,7 +1341,7 @@ GameObject:
   - component: {fileID: 785740925}
   - component: {fileID: 785740924}
   m_Layer: 5
-  m_Name: Title
+  m_Name: TitleImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1856,7 +1864,7 @@ GameObject:
   - component: {fileID: 1239587090}
   - component: {fileID: 1239587089}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: VersionText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1869,7 +1877,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1239587087}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
