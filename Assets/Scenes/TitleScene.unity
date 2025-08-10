@@ -606,7 +606,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1385696697959782677, guid: c73c70ae08152bd40989109e4cf10da7, type: 3}
       propertyPath: fadeInDelay
-      value: 3
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 1385696697959782677, guid: c73c70ae08152bd40989109e4cf10da7, type: 3}
       propertyPath: playFadeInOnStart

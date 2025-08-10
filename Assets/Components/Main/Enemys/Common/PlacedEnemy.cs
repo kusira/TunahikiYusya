@@ -22,11 +22,9 @@ public class PlacedEnemy : MonoBehaviour
     public float skillCooldownTime { get; private set; }
     public string skill { get; private set; }
 
-    // ★ここから追加
     [Header("綱引き設定")]
     [Tooltip("綱引きで不利な状況の時に、ATK差分に乗算されるダメージ係数")]
     [SerializeField] private float tugOfWarDamageMultiplier = 0.1f;
-    // ★ここまで追加
 
     [Header("HPゲージ設定")]
     [SerializeField] private SpriteRenderer hpGaugeRenderer;
@@ -80,35 +78,18 @@ public class PlacedEnemy : MonoBehaviour
 
     void Start()
     {
-        if (database == null)
-        {
-            // データベースが見つからない場合は、シングルトンインスタンスを使用
-            database = EnemyDatabase.Instance;
-            if (database == null)
-            {
-                Debug.LogError("シーンにEnemyDatabaseが見つかりません！", this);
-                return;
-            }
-        }
-        
-        // データベースが初期化されていない場合は初期化を試行
-        if (!database.IsInitialized())
-        {
-            Debug.LogWarning("EnemyDatabaseがまだ初期化されていません。初期化を試行します。", this);
-            // 次のフレームで再試行
-            Invoke(nameof(InitializeStats), 0.1f);
-            return;
-        }
-        
+        ropeManager = GetComponentInParent<RopeManager>();
         InitializeStats();
     }
 
     private void InitializeStats()
     {
         if (database == null) return;
+        Debug.Log("iii");
         
         EnemyDataEntry stats = database.GetStats(enemyName);
         if (stats == null) return;
+        Debug.Log("uuu");
         
         this.maxHp = stats.hp;
         this.hp = stats.hp;
