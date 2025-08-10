@@ -103,10 +103,10 @@ TextureImporter:
       name: dragon_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 32
         y: 0
-        width: 761
-        height: 370
+        width: 539
+        height: 536
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      dragon_0: 3428391033546482049
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

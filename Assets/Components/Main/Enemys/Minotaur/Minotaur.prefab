@@ -88,7 +88,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 3.5, y: 2.5}
+  m_Size: {x: 2.76, y: 5.22}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -119,7 +119,6 @@ MonoBehaviour:
   damageFlashColor: {r: 1, g: 0, b: 0, a: 1}
   healFlashColor: {r: 0, g: 1, b: 0, a: 1}
   flashDuration: 0.2
-  deathForce: 250
   delayBeforeFade: 1.5
   fadeDuration: 0.5
 --- !u!114 &4474715216381930711
@@ -173,13 +172,13 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.48, y: 3.7}
-    newSize: {x: 3.5, y: 2.5}
+    oldSize: {x: 2.76, y: 5.22}
+    newSize: {x: 2.76, y: 5.22}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 3.48, y: 3.7}
+  m_Size: {x: 4.12, y: 5.22}
   m_EdgeRadius: 0
 --- !u!114 &2305759359513644975
 MonoBehaviour:
@@ -201,6 +200,7 @@ MonoBehaviour:
   appearDuration: 0.2
   appearMoveDistance: 50
   baseOrthographicSize: 5
+  isStaticScale: 0
 --- !u!1 &5251516907162840051
 GameObject:
   m_ObjectHideFlags: 0

@@ -103,10 +103,10 @@ TextureImporter:
       name: healer_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 25
         y: 0
-        width: 720
-        height: 370
+        width: 403
+        height: 405
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      healer_0: 7275587250928016836
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -5,6 +5,12 @@ TextureImporter:
   - first:
       213: 7629344899674505093
     second: monk_0
+  - first:
+      213: -5683312940001634745
+    second: monk_1
+  - first:
+      213: -7177311127189665796
+    second: monk_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -105,18 +111,18 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 292
-        height: 370
+        width: 420
+        height: 420
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 58f7906a3c0e0e960800000000000000
-      internalID: 7629344899674505093
+      spriteID: 74652d71ef0d021b0800000000000000
+      internalID: -5683312940001634745
       vertices: []
       indices: 
       edges: []
@@ -125,7 +131,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f85d83d8699013a4388360e3b2dbb16e
     internalID: 0
     vertices: []
     indices: 
@@ -134,7 +140,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      monk_0: -5683312940001634745
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

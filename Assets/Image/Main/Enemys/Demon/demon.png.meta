@@ -5,6 +5,18 @@ TextureImporter:
   - first:
       213: 7806903185615573512
     second: demon_0
+  - first:
+      213: -236736801239978293
+    second: demon_1
+  - first:
+      213: -5603497704160264118
+    second: demon_2
+  - first:
+      213: -2018795354264765380
+    second: demon_3
+  - first:
+      213: -8577595738134336212
+    second: demon_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +112,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: demon_0
+      name: demon_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 347
-        height: 370
+        x: 26
+        y: 20
+        width: 557
+        height: 540
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8025b76a511b75c60800000000000000
-      internalID: 7806903185615573512
+      spriteID: bce24d03221f6bcf0800000000000000
+      internalID: -236736801239978293
       vertices: []
       indices: 
       edges: []
@@ -125,7 +137,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: e1b6f958cd21e6e49b68096e83361a42
     internalID: 0
     vertices: []
     indices: 
@@ -136,6 +148,7 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       demon_0: 7806903185615573512
+      demon_1: -236736801239978293
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

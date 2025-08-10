@@ -298,12 +298,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 101
-  m_Sprite: {fileID: 1226492259313273041, guid: 9945fa8bd603b8a4a8f97a52dd13c97e, type: 3}
+  m_Sprite: {fileID: 2165717997959944645, guid: 48cd37c5c0d01df4ebf71274bc3d775d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 3.5, y: 3.7}
+  m_Size: {x: 4.2, y: 4.2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -339,7 +339,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -347,13 +347,13 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.5, y: 3.7}
-    newSize: {x: 3.5, y: 3.7}
+    oldSize: {x: 4.2, y: 4.2}
+    newSize: {x: 4.2, y: 4.2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 3.5, y: 3.7}
+  m_Size: {x: 4.2, y: 4.2}
   m_EdgeRadius: 0
 --- !u!114 &7683293189222156241
 MonoBehaviour:
@@ -381,7 +381,6 @@ MonoBehaviour:
   damageFlashColor: {r: 1, g: 0, b: 0, a: 1}
   healFlashColor: {r: 0, g: 1, b: 0, a: 1}
   flashDuration: 0.3
-  deathForce: 250
   delayBeforeFade: 1.5
   fadeDuration: 0.5
 --- !u!114 &-574903038933288474
@@ -453,8 +452,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.5, y: 3.7}
-    newSize: {x: 3.5, y: 3.7}
+    oldSize: {x: 4.2, y: 4.2}
+    newSize: {x: 4.2, y: 4.2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0

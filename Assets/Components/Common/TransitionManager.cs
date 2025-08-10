@@ -14,15 +14,35 @@ public class TransitionManager : MonoBehaviour
     [SerializeField] private Ease easeIn = Ease.OutQuad;      // 0 -> 40
     [SerializeField] private Ease easeOut = Ease.InQuad;      // 40 -> 0
     [SerializeField] private bool playFadeInOnStart = true;   // シーン開始時にフェードイン
+    [SerializeField] private float fadeInDelay = 0f;          // フェードイン開始前の待機時間（秒）
 
     private Tween currentTween;
 
     void Start()
     {
+        // 待機時間中はunmaskのスケールを0に設定
+        if (unmask != null)
+        {
+            unmask.localScale = Vector3.zero;
+        }
+        
         if (playFadeInOnStart)
         {
-            PlayFadeIn();
+            if (fadeInDelay > 0f)
+            {
+                StartCoroutine(DelayedFadeIn());
+            }
+            else
+            {
+                PlayFadeIn();
+            }
         }
+    }
+    
+    private IEnumerator DelayedFadeIn()
+    {
+        yield return new WaitForSeconds(fadeInDelay);
+        PlayFadeIn();
     }
 
     public void PlayFadeIn()

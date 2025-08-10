@@ -5,6 +5,18 @@ TextureImporter:
   - first:
       213: 6246832655069406539
     second: soldier_0
+  - first:
+      213: 6017404338080566625
+    second: soldier_1
+  - first:
+      213: -2451782394016434471
+    second: soldier_2
+  - first:
+      213: 4082732244838283841
+    second: soldier_3
+  - first:
+      213: -2269519568428476932
+    second: soldier_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -105,10 +117,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 299
-        height: 460
+        width: 420
+        height: 420
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -125,7 +137,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 1ec64cef7a990104f90dc8b2fc527d80
     internalID: 0
     vertices: []
     indices: 
@@ -134,7 +146,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      soldier_5: -1909616483
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

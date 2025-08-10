@@ -5,6 +5,9 @@ TextureImporter:
   - first:
       213: 8083504613746027167
     second: minotaur_0
+  - first:
+      213: -431145090982683753
+    second: minotaur_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -103,12 +106,12 @@ TextureImporter:
       name: minotaur_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 348
-        height: 370
+        x: 48
+        y: 14
+        width: 276
+        height: 522
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -125,7 +128,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 64e3b99092989824bad6c7b388feeedd
     internalID: 0
     vertices: []
     indices: 
