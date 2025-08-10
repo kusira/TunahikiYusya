@@ -32,14 +32,64 @@ public class EnemyDataEntry
 /// </summary>
 public class EnemyDatabase : MonoBehaviour
 {
+    // シングルトンインスタンス
+    private static EnemyDatabase _instance;
+    
     [Tooltip("ここに全種類の敵のデータを設定します")]
     [SerializeField] private List<EnemyDataEntry> enemies;
     
     // 検索を高速化するための辞書
     private Dictionary<string, EnemyDataEntry> enemyDictionary;
     
+    // シングルトンインスタンスへのアクセサ
+    public static EnemyDatabase Instance
+    {
+        get 
+        { 
+            if (_instance == null)
+            {
+                // インスタンスが見つからない場合は、シーンから探して初期化
+                _instance = FindAnyObjectByType<EnemyDatabase>();
+                if (_instance != null)
+                {
+                    _instance.InitializeDictionary();
+                }
+            }
+            return _instance; 
+        }
+    }
+    
     void Awake()
     {
+        // シングルトンパターンの実装
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+            InitializeDictionary();
+        }
+        else if (_instance != this)
+        {
+            // 既にインスタンスが存在する場合は、このオブジェクトを破壊
+            Destroy(gameObject);
+            return;
+        }
+    }
+    
+    void Start()
+    {
+        // Startでも初期化を確認（二重チェック）
+        if (enemyDictionary == null)
+        {
+            InitializeDictionary();
+        }
+    }
+    
+    private void InitializeDictionary()
+    {
+        // 既に初期化済みの場合は何もしない
+        if (enemyDictionary != null) return;
+        
         // 起動時にリストを辞書に変換して、高速にアクセスできるようにする
         if (enemies != null)
         {
@@ -59,6 +109,12 @@ public class EnemyDatabase : MonoBehaviour
     /// <returns>対応するステータスデータ。見つからなければnullを返します。</returns>
     public EnemyDataEntry GetStats(string name)
     {
+        // 辞書が初期化されていない場合は初期化を試行
+        if (enemyDictionary == null)
+        {
+            InitializeDictionary();
+        }
+        
         // 辞書に敵名が存在するかチェック
         if (enemyDictionary.TryGetValue(name, out EnemyDataEntry entry))
         {
@@ -68,5 +124,14 @@ public class EnemyDatabase : MonoBehaviour
         // 対応するデータが見つからなかった場合
         Debug.LogError($"敵データベースに「{name}」のデータが見つかりません！");
         return null;
+    }
+    
+    /// <summary>
+    /// データベースが初期化されているかチェックします
+    /// </summary>
+    /// <returns>初期化済みの場合true</returns>
+    public bool IsInitialized()
+    {
+        return enemyDictionary != null;
     }
 }

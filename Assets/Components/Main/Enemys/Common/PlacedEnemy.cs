@@ -82,9 +82,30 @@ public class PlacedEnemy : MonoBehaviour
     {
         if (database == null)
         {
-            Debug.LogError("シーンにEnemyDatabaseが見つかりません！", this);
+            // データベースが見つからない場合は、シングルトンインスタンスを使用
+            database = EnemyDatabase.Instance;
+            if (database == null)
+            {
+                Debug.LogError("シーンにEnemyDatabaseが見つかりません！", this);
+                return;
+            }
+        }
+        
+        // データベースが初期化されていない場合は初期化を試行
+        if (!database.IsInitialized())
+        {
+            Debug.LogWarning("EnemyDatabaseがまだ初期化されていません。初期化を試行します。", this);
+            // 次のフレームで再試行
+            Invoke(nameof(InitializeStats), 0.1f);
             return;
         }
+        
+        InitializeStats();
+    }
+
+    private void InitializeStats()
+    {
+        if (database == null) return;
         
         EnemyDataEntry stats = database.GetStats(enemyName);
         if (stats == null) return;
