@@ -32,11 +32,8 @@ public class TutorialManager : MonoBehaviour
     
     private void Start()
     {
-        // 初回起動時のみチュートリアルを表示
-        if (!isTutorialShown)
-        {
-            ShowTutorial();
-        }
+        // シーンをまたいでも破壊されないようにする
+        DontDestroyOnLoad(gameObject);
         
         // ボタンのイベントを設定
         SetupButtons();
@@ -56,6 +53,7 @@ public class TutorialManager : MonoBehaviour
     
     public void ShowTutorial()
     {
+        SetupButtons();
         if (tutorialContainer == null || isTutorialShown) return;
         
         isTutorialShown = true;

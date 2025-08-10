@@ -9,7 +9,7 @@ public class StageManager : MonoBehaviour
     [Header("初期値")]
     [SerializeField] private int defaultStage = 1;
 
-    public int CurrentStage { get; private set; } = 1;
+    public int CurrentStage { get; private set; } = -1;
     
     // 獲得したロープ数を保持
     public int CurrentRopeCount { get; private set; } = 0;
@@ -24,20 +24,19 @@ public class StageManager : MonoBehaviour
             Destroy(gameObject); // 既存のインスタンスを維持
             return;
         }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
         // 初期化（既に値が入っていれば維持）
-        if (CurrentStage <= 0) CurrentStage = Mathf.Max(1, defaultStage);
-    }
-    
-    private void Start()
-    {
-        // 初回起動時のみチュートリアルを表示
-        if (!hasShownTutorial)
-        {
-            ShowTutorial();
-            hasShownTutorial = true;
+        if (CurrentStage <= 0) {
+            CurrentStage = Mathf.Max(1, defaultStage);
+            // 初回起動時のみチュートリアルを表示
+            if (!hasShownTutorial)
+            {
+                ShowTutorial();
+                hasShownTutorial = true;
+            }
         }
     }
     
