@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using unityroom.Api;
 
 public class ButtonManager : MonoBehaviour
 {
@@ -39,6 +40,16 @@ public class ButtonManager : MonoBehaviour
             : FindAnyObjectByType<CardDatabase>(FindObjectsInactive.Include);
 
         transitionManager = FindAnyObjectByType<TransitionManager>(FindObjectsInactive.Include);
+
+        // スコア送信
+        if (isGameClear) {
+            UnityroomApiClient.Instance.SendScore(2, stageManager != null ? stageManager.CurrentRopeCount : 0, ScoreboardWriteMode.HighScoreDesc);
+            UnityroomApiClient.Instance.SendScore(1, stageManager != null ? stageManager.CurrentStage: 1, ScoreboardWriteMode.HighScoreDesc);
+        } 
+        else
+        {
+            UnityroomApiClient.Instance.SendScore(1, stageManager != null ? stageManager.CurrentStage - 1: 0, ScoreboardWriteMode.HighScoreDesc);
+        }
     }
 
     private void Start()
