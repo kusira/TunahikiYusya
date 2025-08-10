@@ -53,7 +53,6 @@ public class TutorialManager : MonoBehaviour
     
     public void ShowTutorial()
     {
-        SetupButtons();
         if (tutorialContainer == null || isTutorialShown) return;
         
         isTutorialShown = true;
