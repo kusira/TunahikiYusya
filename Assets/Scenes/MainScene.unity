@@ -3441,8 +3441,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2253cc74163e25b4cb9e0786763a7507, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unlockProbabilityBoost: 1.6
-  addCountWeightPower: 1.4
+  unlockProbabilityBoost: 1.5
+  addCountWeightPower: 1.3
   addPanelPrefab: {fileID: 395068898777564900, guid: 2a2b4e8031a5dfc4db81980560fc3961, type: 3}
   levelUpPanelPrefab: {fileID: 9090029618046303481, guid: a41ddae9074a4a04cb9892b847f63e28, type: 3}
   unlockPanelPrefab: {fileID: 1675502565465035280, guid: b267a1ca780a1b5448e3bcb1667b7557, type: 3}
@@ -3451,7 +3451,7 @@ MonoBehaviour:
   spawnXMax: 550
   perPanelDelay: 0.15
   maxLevelForGeneratePanel: 2
-  maxCountForGeneratePanel: 3
+  maxCountForGeneratePanel: 2
   allCharacterNames:
   - hero
   - archer
@@ -3801,16 +3801,16 @@ MonoBehaviour:
     maxTotalCost: 0
   - numberOfRopes: 2
     maxTotalCost: 10
-  - numberOfRopes: 2
+  - numberOfRopes: 3
     maxTotalCost: 20
   - numberOfRopes: 3
     maxTotalCost: 35
   - numberOfRopes: 4
-    maxTotalCost: 30
+    maxTotalCost: 35
   - numberOfRopes: 4
-    maxTotalCost: 40
+    maxTotalCost: 45
   - numberOfRopes: 4
-    maxTotalCost: 48
+    maxTotalCost: 50
   - numberOfRopes: 4
     maxTotalCost: 56
   - numberOfRopes: 4
@@ -3820,9 +3820,9 @@ MonoBehaviour:
   - numberOfRopes: 4
     maxTotalCost: 75
   - numberOfRopes: 4
-    maxTotalCost: 80
+    maxTotalCost: 85
   - numberOfRopes: 4
-    maxTotalCost: 90
+    maxTotalCost: 100
   spawnYPosition: 1
   minXPosition: -6
   maxXPosition: 6
@@ -4654,12 +4654,12 @@ MonoBehaviour:
     characterSprite: {fileID: 7645987207138800475, guid: 9b95bfa41c9c8d546b9db1cbe1f7b358, type: 3}
     levelStats:
     - hp: 250
-      atk: 13
+      atk: 14
       hasCooldownSkill: 0
       skillCooldownTime: 0
       skillDescription: "\u5473\u65B9\u304C3\u4EBA\u4EE5\u4E0A\u306E\u6642\u3001<color=#FFCA28>ATK\xD71.5\u306E\u30D0\u30D5</color>"
     - hp: 300
-      atk: 16
+      atk: 17
       hasCooldownSkill: 0
       skillCooldownTime: 0
       skillDescription: "\u5473\u65B9\u304C3\u4EBA\u4EE5\u4E0A\u306E\u6642\u3001<color=#FFCA28>ATK\xD71.5\u306E\u30D0\u30D5</color>"

@@ -51,10 +51,19 @@ public class HealerSkillManager : MonoBehaviour
 
                 PlacedEnemy targetEnemy = targetGO.GetComponent<PlacedEnemy>();
 
-                // 2. ターゲットが生存しており、かつ自分自身ではない場合に回復
-                if (targetEnemy != null && targetEnemy != _placedEnemy && _ropeManager.AliveEnemies.Contains(targetEnemy))
+                // 2. ターゲットが生存している場合に回復（自身も含む）
+                if (targetEnemy != null && _ropeManager.AliveEnemies.Contains(targetEnemy))
                 {
-                    Debug.Log($"  -> {targetEnemy.name} を {healAmount} 回復！");
+                    // 自身の場合は特別なログを表示
+                    if (targetEnemy == _placedEnemy)
+                    {
+                        Debug.Log($"  -> <color=yellow>自身 {targetEnemy.name} を {healAmount} 回復！</color>");
+                    }
+                    else
+                    {
+                        Debug.Log($"  -> {targetEnemy.name} を {healAmount} 回復！");
+                    }
+                    
                     targetEnemy.Heal(healAmount);
                 }
             }
