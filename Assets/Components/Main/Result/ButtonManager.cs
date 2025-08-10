@@ -24,12 +24,25 @@ public class ButtonManager : MonoBehaviour
     [SerializeField] private Ease pressEase = Ease.OutQuad;
     [SerializeField] private Ease releaseEase = Ease.InQuad;
 
+    [Header("音響")]
+    [SerializeField] private AudioSource audioSource; // AudioSourceコンポーネント
+
     private StageManager stageManager;
     private CardDatabase cardDatabase;
     private TransitionManager transitionManager;
 
     private void Awake()
     {
+        // AudioSourceがアサインされていない場合は自動で取得
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+            }
+        }
+
         // 探すコンポーネント
         stageManager = StageManager.Instance != null
             ? StageManager.Instance
@@ -78,7 +91,10 @@ public class ButtonManager : MonoBehaviour
 
         // PointerClick -> アクション
         var clickEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerClick };
-        clickEntry.callback.AddListener(_ => onClick?.Invoke());
+        clickEntry.callback.AddListener(_ => {
+            PlayButtonSound(); // ボタンクリック音を再生
+            onClick?.Invoke();
+        });
         trigger.triggers.Add(clickEntry);
     }
 
@@ -152,6 +168,17 @@ public class ButtonManager : MonoBehaviour
             // Result表示中は timeScale=0 なので、遷移直前に元に戻しておく
             Time.timeScale = 1f;
             SceneManager.LoadScene(sceneName);
+        }
+    }
+
+    /// <summary>
+    /// ボタンクリック音を再生
+    /// </summary>
+    private void PlayButtonSound()
+    {
+        if (audioSource != null && audioSource.clip != null)
+        {
+            audioSource.Play();
         }
     }
 }

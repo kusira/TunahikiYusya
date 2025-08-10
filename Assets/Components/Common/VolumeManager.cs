@@ -26,10 +26,10 @@ public class VolumeManager : MonoBehaviour
     private void Start()
     {
         // --- 保存された音量設定を読み込む ---
-        // BGM：キーが存在すればその値を、なければデフォルト値1.0f（最大音量）を読み込む
-        float bgmVolume = PlayerPrefs.GetFloat(BGM_VOLUME_KEY, 1.0f);
-        // SE：キーが存在すればその値を、なければデフォルト値1.0f（最大音量）を読み込む
-        float seVolume = PlayerPrefs.GetFloat(SE_VOLUME_KEY, 1.0f);
+        // BGM：キーが存在すればその値を、なければデフォルト値0.5を読み込む
+        float bgmVolume = PlayerPrefs.GetFloat(BGM_VOLUME_KEY, 0.5f);
+        // SE：キーが存在すればその値を、なければデフォルト値0.5を読み込む
+        float seVolume = PlayerPrefs.GetFloat(SE_VOLUME_KEY, 0.5f);
 
         // --- UIとAudioMixerの初期値を設定 ---
         // スライダーの初期値を設定

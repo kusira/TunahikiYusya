@@ -7,6 +7,7 @@ public class TransitionManager : MonoBehaviour
 {
     [Header("参照")]
     [SerializeField] private Transform unmask;
+    [SerializeField] private AudioSource audioSource; // 追加：フェードアウト時に再生する音
 
     [Header("設定")]
     [SerializeField] private float transitionDuration = 0.3f; // デフォルト0.3s
@@ -81,6 +82,12 @@ public class TransitionManager : MonoBehaviour
 
         KillTween();
         unmask.localScale = Vector3.one * targetScale;
+
+        // フェードアウト時に音を再生
+        if (audioSource != null)
+        {
+            audioSource.Play();
+        }
 
         bool done = false;
         currentTween = unmask
