@@ -48,10 +48,6 @@ public class PopupManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     void Awake()
     {
         _mainCamera = Camera.main;
-    }
-    
-    void Start()
-    {
         GameObject parentGO = GameObject.Find("PopupContainer");
         if (parentGO != null)
         {
@@ -61,10 +57,23 @@ public class PopupManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         {
             Debug.LogWarning("ポップアップの親となる 'PopupContainer' という名前のGameObjectが見つかりません！", this);
         }
-
+    }
+    
+    void Start()
+    {
         _characterDatabase = FindAnyObjectByType<CharacterDatabase>();
         _enemyDatabase = FindAnyObjectByType<EnemyDatabase>();
         _cardDatabase = FindAnyObjectByType<CardDatabase>();
+        
+        // データベースのnullチェックを追加
+        if (_characterDatabase == null)
+            Debug.LogError("CharacterDatabaseが見つかりません！", this);
+        if (_enemyDatabase == null)
+            Debug.LogError("EnemyDatabaseが見つかりません！", this);
+        if (_cardDatabase == null)
+            Debug.LogError("CardDatabaseが見つかりません！", this);
+        if (string.IsNullOrEmpty(characterName))
+            Debug.LogError("characterNameが設定されていません！", this);
     }
 
     void Update()
@@ -160,8 +169,21 @@ public class PopupManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     private void PopulatePopupData(TMP_Text nameText, TMP_Text atkValue, TMP_Text hpValue, TMP_Text skillText)
     {
+        // データベースのnullチェックを追加
+        if (_cardDatabase == null || _characterDatabase == null)
+        {
+            Debug.LogError("必要なデータベースが初期化されていません！", this);
+            return;
+        }
+        
         if (isEnemy)
         {
+            if (_enemyDatabase == null)
+            {
+                Debug.LogError("EnemyDatabaseが初期化されていません！", this);
+                return;
+            }
+            
             var stats = _enemyDatabase.GetStats(characterName);
             if (stats == null) return;
             nameText.text = !string.IsNullOrEmpty(stats.displayName) ? stats.displayName : stats.enemyName;
