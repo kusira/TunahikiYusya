@@ -61,6 +61,11 @@ public class PopupManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     
     void Start()
     {
+        InitializeDatabases();
+    }
+
+    private void InitializeDatabases()
+    {
         _characterDatabase = FindAnyObjectByType<CharacterDatabase>();
         _enemyDatabase = FindAnyObjectByType<EnemyDatabase>();
         _cardDatabase = FindAnyObjectByType<CardDatabase>();
@@ -169,19 +174,32 @@ public class PopupManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     private void PopulatePopupData(TMP_Text nameText, TMP_Text atkValue, TMP_Text hpValue, TMP_Text skillText)
     {
-        // データベースのnullチェックを追加
+        // データベースが初期化されていない場合は、再度取得を試行
         if (_cardDatabase == null || _characterDatabase == null)
         {
-            Debug.LogError("必要なデータベースが初期化されていません！", this);
-            return;
+            Debug.LogWarning("必要なデータベースが初期化されていません。再度取得を試行します。", this);
+            InitializeDatabases();
+            
+            // 再度チェック
+            if (_cardDatabase == null || _characterDatabase == null)
+            {
+                Debug.LogError("必要なデータベースが初期化されていません！", this);
+                return;
+            }
         }
         
         if (isEnemy)
         {
             if (_enemyDatabase == null)
             {
-                Debug.LogError("EnemyDatabaseが初期化されていません！", this);
-                return;
+                Debug.LogWarning("EnemyDatabaseが初期化されていません。再度取得を試行します。", this);
+                _enemyDatabase = FindAnyObjectByType<EnemyDatabase>();
+                
+                if (_enemyDatabase == null)
+                {
+                    Debug.LogError("EnemyDatabaseが初期化されていません！", this);
+                    return;
+                }
             }
             
             var stats = _enemyDatabase.GetStats(characterName);

@@ -32,9 +32,6 @@ public class TutorialManager : MonoBehaviour
     
     private void Start()
     {
-        // シーンをまたいでも破壊されないようにする
-        DontDestroyOnLoad(gameObject);
-        
         // ボタンのイベントを設定
         SetupButtons();
     }
