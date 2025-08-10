@@ -956,8 +956,8 @@ Transform:
   m_GameObject: {fileID: 470069414}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 15, z: 0}
+  m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1343,7 +1343,7 @@ MonoBehaviour:
   zoomSpeed: 350
   minZoomSize: 5
   maxZoomSize: 10
-  minBounds: {x: -16, y: -9}
+  minBounds: {x: -16, y: -14}
   maxBounds: {x: 16, y: 9}
   staticObjects:
   - {fileID: 1833443244}
@@ -4231,8 +4231,8 @@ Transform:
   m_GameObject: {fileID: 1871174696}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -8, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -13, z: 0}
+  m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -5211,7 +5211,7 @@ MonoBehaviour:
   - enemyName: minotaur
     displayName: "\u30DF\u30CE\u30BF\u30A6\u30ED\u30B9"
     hp: 90
-    atk: 16
+    atk: 14
     hasCooldownSkill: 1
     skillCooldownTime: 4
     skillDescription: "<color=#2196F3>4\u79D2\u3054\u3068</color>\u306B\u5473\u65B9\u304C\u3044\u308B\u6700\u524D\u884C\u306B<color=#EF5350>ATK\xD73\u30C0\u30E1\u30FC\u30B8</color>"

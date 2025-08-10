@@ -44,6 +44,8 @@ public class MonkSkillManager : MonoBehaviour
         // RopeManagerが管理している、同じ綱の味方キャラクター全員を取得
         ICollection<GameObject> alliesOnSameRope = _ropeManager.OccupiedHolderInfo.Values;
 
+        _placedCharacter.Heal(healAmount);
+        
         foreach (GameObject allyGO in alliesOnSameRope)
         {
             if (allyGO == null) continue; // すでに破壊された味方はスキップ
