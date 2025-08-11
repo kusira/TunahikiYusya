@@ -17,6 +17,9 @@ public class RopeCountManager : MonoBehaviour
     [Tooltip("ロープがフェードアウトして消えるまでの時間")]
     [SerializeField] private float fadeOutDuration = 1.0f;
 
+    [Header("音響設定")]
+    [SerializeField] private AudioSource audioSource;
+
     private RopeManager ropeManager;
 
     // --- 外部から参照可能なstatic変数 ---
@@ -32,6 +35,12 @@ public class RopeCountManager : MonoBehaviour
 
     void Start()
     {
+        // AudioSourceの自動取得
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
+
         ResetCounts();
         // シーンからUIオブジェクトを名前で検索し、コンポーネントを取得
         var alliedCountObject = GameObject.Find("AlliedRopeCount");
@@ -100,6 +109,12 @@ public class RopeCountManager : MonoBehaviour
     /// </summary>
     private void FadeOutAndDestroy()
     {
+        // ロープ消滅音を再生
+        if (audioSource != null && audioSource.clip != null)
+        {
+            audioSource.Play();
+        }
+
         // 勝敗判定とDie処理
         if (ropeManager != null)
         {
@@ -132,6 +147,16 @@ public class RopeCountManager : MonoBehaviour
                         if (enemyManager != null) enemyManager.Die();
                     }
                 }
+            }
+        }
+
+        // 子オブジェクトのBoxCollider2Dをすべて無効化（削除ではなく）
+        BoxCollider2D[] childColliders = GetComponentsInChildren<BoxCollider2D>();
+        foreach (var collider in childColliders)
+        {
+            if (collider != null)
+            {
+                collider.enabled = false; // 削除ではなく無効化
             }
         }
 

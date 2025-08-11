@@ -384,6 +384,7 @@ MonoBehaviour:
   flashDuration: 0.3
   delayBeforeFade: 1.5
   fadeDuration: 0.5
+  audioSource: {fileID: 3799263144280533143}
 --- !u!114 &7964362970237688943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,7 +414,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillDamageMagnification: 5
-  skillAudioSource: {fileID: 3799263144280533143}
 --- !u!61 &5625815093044785925
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -491,10 +491,10 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -666516380205811288, guid: 53eb129ecd50e614cb1848d72b5f9e6f, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 9a4af0e5d44583544bbc4ab35870208c, type: 3}
-  m_Resource: {fileID: 8300000, guid: 9a4af0e5d44583544bbc4ab35870208c, type: 3}
-  m_PlayOnAwake: 1
-  m_Volume: 0.219
+  m_audioClip: {fileID: 8300000, guid: bbf63fb8210935240ac2ea16fc69db30, type: 3}
+  m_Resource: {fileID: 8300000, guid: bbf63fb8210935240ac2ea16fc69db30, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0

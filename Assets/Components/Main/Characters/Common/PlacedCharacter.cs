@@ -54,7 +54,10 @@ public class PlacedCharacter : MonoBehaviour
     
     [Header("死亡演出の設定")]
     [SerializeField] private float delayBeforeFade = 1.5f;
-    [SerializeField] private float fadeDuration = 0.5f;
+    [SerializeField] private float fadeDuration = 0.3f;
+
+    [Header("音響設定")]
+    [SerializeField] private AudioSource audioSource;
     #endregion
 
     public bool IsPaused { get; private set; } = false;
@@ -80,6 +83,7 @@ public class PlacedCharacter : MonoBehaviour
         mainSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         allRenderers = GetComponentsInChildren<SpriteRenderer>();
         boxCollider = GetComponent<BoxCollider2D>();
+        audioSource = GetComponent<AudioSource>();
         database = FindAnyObjectByType<CharacterDatabase>();
         ropeManager = GetComponentInParent<RopeManager>();
         battleBeginsManager = FindAnyObjectByType<BattleBeginsManager>();
@@ -164,6 +168,17 @@ public class PlacedCharacter : MonoBehaviour
 
     void Update()
     {
+        // RopeManagerが存在しない場合は自身を破棄
+        if (ropeManager == null)
+        {
+            ropeManager = FindAnyObjectByType<RopeManager>();
+            if (ropeManager == null)
+            {
+                FadeOutAndDestroy();
+                return;
+            }
+        }
+        
         if (battleBeginsManager != null && !battleBeginsManager.IsInBattle) return;
         
         if (hasCooldownSkill && !isDead && !IsPaused)
@@ -298,6 +313,12 @@ public class PlacedCharacter : MonoBehaviour
         if (isDead) return;
         isDead = true;
 
+        // 死亡音を再生
+        if (audioSource != null && audioSource.clip != null)
+        {
+            audioSource.Play();
+        }
+
         if (CurrentHolder != null)
         {
             CurrentHolder.SetOccupied(false);
@@ -391,6 +412,41 @@ public class PlacedCharacter : MonoBehaviour
         Color currentColor = skillGaugeRenderer.color;
         currentColor.a = gaugeAlpha;
         skillGaugeRenderer.color = currentColor;
+    }
+
+    /// <summary>
+    /// フェードアウトしてから破棄します
+    /// </summary>
+    private void FadeOutAndDestroy()
+    {
+        // 既存のアニメーションを停止
+        if (allRenderers != null)
+        {
+            foreach (var renderer in allRenderers)
+            {
+                renderer.DOKill();
+            }
+        }
+
+        // フェードアウト処理
+        if (allRenderers != null && allRenderers.Length > 0)
+        {
+            foreach (var renderer in allRenderers)
+            {
+                renderer.DOFade(0, fadeDuration);
+            }
+
+            // フェードアウト完了後に破棄
+            allRenderers[0].DOFade(0, fadeDuration).OnComplete(() =>
+            {
+                Destroy(gameObject);
+            });
+        }
+        else
+        {
+            // SpriteRendererがない場合は即座に破棄
+            Destroy(gameObject);
+        }
     }
     #endregion
 }

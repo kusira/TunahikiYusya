@@ -49,6 +49,9 @@ public class PlacedEnemy : MonoBehaviour
     [SerializeField] private float delayBeforeFade = 1.5f;
     [SerializeField] private float fadeDuration = 0.5f;
 
+    [Header("音響設定")]
+    [SerializeField] private AudioSource audioSource;
+
     // --- 内部変数 ---
     private EnemyDatabase database;
     private BattleBeginsManager battleBeginsManager;
@@ -71,6 +74,7 @@ public class PlacedEnemy : MonoBehaviour
         mainSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         allRenderers = GetComponentsInChildren<SpriteRenderer>();
         boxCollider = GetComponent<BoxCollider2D>();
+        audioSource = GetComponent<AudioSource>();
         database = FindAnyObjectByType<EnemyDatabase>();
         battleBeginsManager = FindAnyObjectByType<BattleBeginsManager>();
         ropeManager = GetComponentInParent<RopeManager>();
@@ -85,11 +89,9 @@ public class PlacedEnemy : MonoBehaviour
     private void InitializeStats()
     {
         if (database == null) return;
-        Debug.Log("iii");
-        
+
         EnemyDataEntry stats = database.GetStats(enemyName);
         if (stats == null) return;
-        Debug.Log("uuu");
         
         this.maxHp = stats.hp;
         this.hp = stats.hp;
@@ -243,6 +245,12 @@ public class PlacedEnemy : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
+
+        // 死亡音を再生
+        if (audioSource != null && audioSource.clip != null)
+        {
+            audioSource.Play();
+        }
 
         OnEnemyDied?.Invoke(this);
 

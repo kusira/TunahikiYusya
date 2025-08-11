@@ -1091,8 +1091,9 @@ GameObject:
   m_Component:
   - component: {fileID: 455480225}
   - component: {fileID: 455480224}
+  - component: {fileID: 455480226}
   m_Layer: 0
-  m_Name: BGMManager
+  m_Name: MainBGMManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1110,7 +1111,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 7179795661257485775, guid: 53eb129ecd50e614cb1848d72b5f9e6f, type: 2}
   m_audioClip: {fileID: 8300000, guid: 01a0a56cfa8683f4c8616839f738cff2, type: 3}
   m_Resource: {fileID: 8300000, guid: 01a0a56cfa8683f4c8616839f738cff2, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.6
   m_Pitch: 1
   Loop: 1
@@ -1210,6 +1211,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &455480226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455480223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a308833968e999140872770ea440bcf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgmAudioSource: {fileID: 455480224}
+  bgmVolume: 1
 --- !u!1 &470069414
 GameObject:
   m_ObjectHideFlags: 0
@@ -2021,7 +2036,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 3c94a0e77757cf94099f51411b4e6fe9, type: 3}
   m_Resource: {fileID: 8300000, guid: 3c94a0e77757cf94099f51411b4e6fe9, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.708
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -5145,13 +5160,13 @@ MonoBehaviour:
   - numberOfRopes: 4
     maxTotalCost: 60
   - numberOfRopes: 4
-    maxTotalCost: 70
+    maxTotalCost: 68
   - numberOfRopes: 4
-    maxTotalCost: 75
+    maxTotalCost: 76
   - numberOfRopes: 4
-    maxTotalCost: 85
+    maxTotalCost: 84
   - numberOfRopes: 4
-    maxTotalCost: 100
+    maxTotalCost: 94
   spawnYPosition: 1
   minXPosition: -6
   maxXPosition: 6

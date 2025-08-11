@@ -9,6 +9,9 @@ public class StartManager : MonoBehaviour
     [SerializeField] private TransitionManager transitionManager;
     [SerializeField] private TextMeshProUGUI startText;
     
+    [Header("音響設定")]
+    [SerializeField] private AudioSource audioSource;
+    
     [Header("点滅設定")]
     [SerializeField] private float blinkDuration = 2f; // 1周期の時間（秒）
     [SerializeField] private float minAlpha = 0.2f;   // 最小透明度
@@ -29,6 +32,12 @@ public class StartManager : MonoBehaviour
         if (startText == null)
         {
             Debug.LogError("StartManager: StartTextが未アサインです。", this);
+        }
+
+        // AudioSourceの自動取得
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
         }
     }
     
@@ -63,6 +72,12 @@ public class StartManager : MonoBehaviour
     public void OnStartButtonClicked()
     {
         Debug.Log("StartManager: スタートボタンがクリックされました。メインシーンに遷移します。");
+        
+        // スタート音を再生
+        if (audioSource != null && audioSource.clip != null)
+        {
+            audioSource.Play();
+        }
         
         if (transitionManager != null)
         {
