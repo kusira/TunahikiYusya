@@ -7539,17 +7539,17 @@ MonoBehaviour:
       atk: 9
       hasCooldownSkill: 1
       skillCooldownTime: 5
-      skillDescription: "<color=#2196F3>5\u79D2\u3054\u3068</color>\u306B\u6575\u304C\u3044\u308B\u6700\u524D\u884C\u306B<color=#EF5350>ATK\xD75\u653B\u6483</color>"
+      skillDescription: "<color=#2196F3>5\u79D2\u3054\u3068</color>\u306B\u6575\u304C\u3044\u308B\u6700\u524D\u884C\u306E2\u5217\u306B<color=#EF5350>ATK\xD75\u653B\u6483</color>"
     - hp: 240
       atk: 12
       hasCooldownSkill: 1
       skillCooldownTime: 5
-      skillDescription: "<color=#2196F3>5\u79D2\u3054\u3068</color>\u306B\u6575\u304C\u3044\u308B\u6700\u524D\u884C\u306B<color=#EF5350>ATK\xD75\u653B\u6483</color>"
+      skillDescription: "<color=#2196F3>5\u79D2\u3054\u3068</color>\u306B\u6575\u304C\u3044\u308B\u6700\u524D\u884C\u306E2\u5217\u306B<color=#EF5350>ATK\xD75\u653B\u6483</color>"
     - hp: 300
       atk: 15
       hasCooldownSkill: 1
       skillCooldownTime: 5
-      skillDescription: "<color=#2196F3>5\u79D2\u3054\u3068</color>\u306B\u6575\u304C\u3044\u308B\u6700\u524D\u884C\u306B<color=#EF5350>ATK\xD75\u653B\u6483</color>"
+      skillDescription: "<color=#2196F3>5\u79D2\u3054\u3068</color>\u306B\u6575\u304C\u3044\u308B\u6700\u524D\u884C\u306E2\u5217\u306B<color=#EF5350>ATK\xD75\u653B\u6483</color>"
 --- !u!1001 &3566040076900008593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7945,14 +7945,14 @@ MonoBehaviour:
     atk: 8
     hasCooldownSkill: 1
     skillCooldownTime: 2
-    skillDescription: "<color=#2196F3>2\u79D2\u3054\u3068</color>\u306B\u6700\u524D\u7DDA\u306B<color=#EF5350>ATK\xD72\u30C0\u30E1\u30FC\u30B8</color>"
+    skillDescription: "<color=#2196F3>2\u79D2\u3054\u3068</color>\u306B\u30E9\u30F3\u30C0\u30E0\u306A\u5358\u4F53\u306B<color=#EF5350>ATK\xD72\u30C0\u30E1\u30FC\u30B8</color>"
   - enemyName: minotaur
     displayName: "\u30B1\u30F3\u30BF\u30A6\u30ED\u30B9"
     hp: 90
     atk: 14
     hasCooldownSkill: 1
     skillCooldownTime: 4
-    skillDescription: "<color=#2196F3>4\u79D2\u3054\u3068</color>\u306B\u5473\u65B9\u304C\u3044\u308B\u6700\u524D\u884C\u306B<color=#EF5350>ATK\xD73\u30C0\u30E1\u30FC\u30B8</color>"
+    skillDescription: "<color=#2196F3>4\u79D2\u3054\u3068</color>\u306B\u5473\u65B9\u304C\u3044\u308B\u6700\u524D\u884C\u306E2\u5217\u306B<color=#EF5350>ATK\xD73\u30C0\u30E1\u30FC\u30B8</color>"
   - enemyName: healer
     displayName: "\u30D2\u30FC\u30E9\u30FC"
     hp: 100
@@ -7973,7 +7973,7 @@ MonoBehaviour:
     atk: 30
     hasCooldownSkill: 1
     skillCooldownTime: 5
-    skillDescription: "<color=#2196F3>5\u79D2\u3054\u3068</color>\u306B<color=#66BB6A>\u5168\u4F53\u56DE\u5FA9</color>\u3001<color=#EF5350>\u30E9\u30F3\u30C0\u30E0\u5358\u4F53\u653B\u6483</color>\u3001<color=#EF5350>\u5168\u4F53\u653B\u6483</color>\u304C\u30E9\u30F3\u30C0\u30E0\u3067\u767A\u52D5"
+    skillDescription: "<color=#2196F3>5\u79D2\u3054\u3068</color>\u306B<color=#66BB6A>\u5168\u4F53\u56DE\u5FA9ATK\xD72</color>\u3001<color=#EF5350>\u30E9\u30F3\u30C0\u30E0\u5358\u4F53\u653B\u6483ATK\xD74</color>\u3001<color=#EF5350>\u5168\u4F53\u653B\u6483ATK\xD72</color>\u304C\u30E9\u30F3\u30C0\u30E0\u767A\u52D5"
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
