@@ -24,12 +24,26 @@ public class TimeScalerManager : MonoBehaviour
     [Tooltip("選択されていない速度のUI色")]
     [SerializeField] private Color inactiveColor = Color.gray;
 
+    [Header("音声設定")]
+    [Tooltip("速度変更時に再生するAudioSource")]
+    [SerializeField] private AudioSource speedChangeAudio;
+
     //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+    private float currentTimeScale = 1.0f; // 現在のタイムスケールを追跡
 
     void Start()
     {
-        // 起動時にデフォルトのx1速度に設定
-        ChangeTimeScale(1.0f);
+        // 起動時にデフォルトのx1速度に設定（音声は鳴らさない）
+        ChangeTimeScale(1.0f, false);
+        
+        // UIの色を初期化（1倍が選択された状態）
+        if (speed1xImage != null)
+            speed1xImage.color = activeColor;
+        if (speed2xImage != null)
+            speed2xImage.color = inactiveColor;
+        if (speed4xImage != null)
+            speed4xImage.color = inactiveColor;
     }
 
     // =======================================================
@@ -41,7 +55,7 @@ public class TimeScalerManager : MonoBehaviour
     /// </summary>
     public void SetTimeScaleTo1()
     {
-        ChangeTimeScale(1.0f);
+        ChangeTimeScale(1.0f, true);
     }
 
     /// <summary>
@@ -49,7 +63,7 @@ public class TimeScalerManager : MonoBehaviour
     /// </summary>
     public void SetTimeScaleTo2()
     {
-        ChangeTimeScale(2.0f);
+        ChangeTimeScale(2.0f, true);
     }
 
     /// <summary>
@@ -57,7 +71,7 @@ public class TimeScalerManager : MonoBehaviour
     /// </summary>
     public void SetTimeScaleTo4()
     {
-        ChangeTimeScale(4.0f);
+        ChangeTimeScale(4.0f, true);
     }
 
     // =======================================================
@@ -67,11 +81,24 @@ public class TimeScalerManager : MonoBehaviour
     /// <summary>
     /// 実際にタイムスケール変更とUI更新を行う処理
     /// </summary>
-    private void ChangeTimeScale(float newScale)
+    /// <param name="newScale">新しいタイムスケール</param>
+    /// <param name="playSound">音声を再生するかどうか</param>
+    private void ChangeTimeScale(float newScale, bool playSound)
     {
-        Debug.Log($"ボタンが押されました。タイムスケールを x{newScale} に変更します。");
-        Time.timeScale = newScale;
-        UpdateVisuals(newScale);
+        // タイムスケールが実際に変更される場合のみ処理
+        if (!Mathf.Approximately(currentTimeScale, newScale))
+        {
+            Debug.Log($"ボタンが押されました。タイムスケールを x{newScale} に変更します。");
+            Time.timeScale = newScale;
+            currentTimeScale = newScale;
+            UpdateVisuals(newScale);
+            
+            // 音声再生が有効で、実際に変更があった場合のみ音声を再生
+            if (playSound && speedChangeAudio != null)
+            {
+                speedChangeAudio.Play();
+            }
+        }
     }
 
     /// <summary>

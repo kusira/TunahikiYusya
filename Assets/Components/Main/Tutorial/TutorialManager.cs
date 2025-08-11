@@ -26,6 +26,12 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private float backgroundFadeDuration = 0.5f;
     [SerializeField] private float panelSlideDuration = 0.3f;
     [SerializeField] private float panelSlideDistance = 100f;
+
+    [Header("音声設定")]
+    [Tooltip("ページをめくるときに再生するAudioSource")]
+    [SerializeField] private AudioSource pageTurnAudio;
+    [Tooltip("チュートリアルを閉じるときに再生するAudioSource")]
+    [SerializeField] private AudioSource closeAudio;
     
     private int currentImageIndex = 0;
     private bool isTutorialShown = false;
@@ -84,6 +90,9 @@ public class TutorialManager : MonoBehaviour
     {
         if (tutorialContainer == null) return;
         
+        // 閉じる音を再生
+        PlayCloseSound();
+        
         // マネージャーを再有効化
         EnableManagers();
         
@@ -141,6 +150,9 @@ public class TutorialManager : MonoBehaviour
     {
         if (currentImageIndex > 0)
         {
+            // ページをめくる音を再生
+            PlayPageTurnSound();
+            
             currentImageIndex--;
             UpdateTutorialDisplay();
             UpdateButtonStates();
@@ -151,6 +163,9 @@ public class TutorialManager : MonoBehaviour
     {
         if (currentImageIndex < tutorialImages.Count - 1)
         {
+            // ページをめくる音を再生
+            PlayPageTurnSound();
+            
             currentImageIndex++;
             UpdateTutorialDisplay();
             UpdateButtonStates();
@@ -189,6 +204,28 @@ public class TutorialManager : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// ページをめくる音を再生する
+    /// </summary>
+    private void PlayPageTurnSound()
+    {
+        if (pageTurnAudio != null)
+        {
+            pageTurnAudio.Play();
+        }
+    }
+
+    /// <summary>
+    /// チュートリアルを閉じる音を再生する
+    /// </summary>
+    private void PlayCloseSound()
+    {
+        if (closeAudio != null)
+        {
+            closeAudio.Play();
+        }
+    }
+
     private void OnDestroy()
     {
         // ボタンのイベントを解除

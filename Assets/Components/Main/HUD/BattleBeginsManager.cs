@@ -5,6 +5,7 @@ using DG.Tweening;
 
 [RequireComponent(typeof(Image))]
 [RequireComponent(typeof(CanvasGroup))]
+[RequireComponent(typeof(AudioSource))] // AudioSourceを必須コンポーネントに追加
 public class BattleBeginsManager : MonoBehaviour, IPointerClickHandler
 {
     [Header("ボタンのアニメーション設定")]
@@ -26,6 +27,10 @@ public class BattleBeginsManager : MonoBehaviour, IPointerClickHandler
     [SerializeField] private float textDisplayDuration = 1.0f;
     [Tooltip("テキストが消える時のフェードアウト時間")]
     [SerializeField] private float textFadeOutDuration = 0.3f;
+
+    [Header("音声設定")]
+    [Tooltip("バトル開始ボタンクリック時に再生するAudioSource")]
+    [SerializeField] private AudioSource buttonClickAudio;
 
     /// <summary>
     /// 【変更点】staticを削除。このインスタンスがバトル中かどうかを示すプロパティ。
@@ -54,6 +59,12 @@ public class BattleBeginsManager : MonoBehaviour, IPointerClickHandler
             return;
         }
 
+        // ボタンクリック音を再生
+        if (buttonClickAudio != null)
+        {
+            buttonClickAudio.Play();
+        }
+
         IsInBattle = true;
         canvasGroup.interactable = false;
 
@@ -71,8 +82,24 @@ public class BattleBeginsManager : MonoBehaviour, IPointerClickHandler
         buttonAnimation.Append(canvasGroup.DOFade(0, fadeOutDuration).SetEase(Ease.InQuad));
         buttonAnimation.OnComplete(() =>
         {
-            gameObject.SetActive(false);
+            // 音がなくなるまで待ってから非アクティブにする
+            StartCoroutine(WaitForAudioToFinish());
         });
+    }
+
+    /// <summary>
+    /// 音の再生が完了するまで待ってからGameObjectを非アクティブにする
+    /// </summary>
+    private System.Collections.IEnumerator WaitForAudioToFinish()
+    {
+        // 音が再生中の場合、再生が完了するまで待つ
+        if (buttonClickAudio != null && buttonClickAudio.isPlaying)
+        {
+            yield return new WaitWhile(() => buttonClickAudio.isPlaying);
+        }
+        
+        // 音の再生が完了したら非アクティブにする
+        gameObject.SetActive(false);
     }
     
     private void AnimateBattleStartText()

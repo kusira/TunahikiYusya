@@ -22,6 +22,10 @@ public class DragAndDropCharacterManager : MonoBehaviour
 
     [Header("ドラッグ中の描画設定")]
     [SerializeField] private int dragSortingOrder = 1000;
+
+    [Header("音声設定")]
+    [Tooltip("ドラッグ開始時とドロップ時に再生するAudioSource")]
+    [SerializeField] private AudioSource dragAndDropAudio;
     
     private GameObject draggedObject;
     private GameObject characterToInstantiate;
@@ -90,6 +94,9 @@ public class DragAndDropCharacterManager : MonoBehaviour
                 var cardData = hitObject.GetComponent<CharacterCardData>();
                 if (cardData != null && cardData.characterPrefab != null && cardData.Count > 0)
                 {
+                    // ドラッグ開始音を再生
+                    PlayDragAndDropSound();
+                    
                     currentDragMode = DragMode.FromCard;
                     sourceCardData = cardData;
                     characterToInstantiate = cardData.characterPrefab;
@@ -105,6 +112,9 @@ public class DragAndDropCharacterManager : MonoBehaviour
             {
                 var placedChar = hitObject.GetComponent<PlacedCharacter>();
                 if (placedChar == null || placedChar.IsPaused) return;
+                
+                // ドラッグ開始音を再生
+                PlayDragAndDropSound();
                 
                 placedChar.OnDragStart();
                 
@@ -159,6 +169,9 @@ public class DragAndDropCharacterManager : MonoBehaviour
             currentDragMode == DragMode.FromField && sourceCardData != null && 
             Vector2.Distance(dropPosition, sourceCardData.transform.position) < returnToCardRadius)
         {
+            // カードに戻る場合のドロップ音を再生
+            PlayDragAndDropSound();
+            
             sourceCardData.IncreaseCount();
             Destroy(draggedObject);
             ResetDragState();
@@ -187,6 +200,9 @@ public class DragAndDropCharacterManager : MonoBehaviour
         
         if (closestHolder != null)
         {
+            // 配置成功時のドロップ音を再生
+            PlayDragAndDropSound();
+            
             var targetHolderManager = closestHolder.GetComponent<CharacterHolderManager>();
             targetHolderManager.SetOccupied(true);
             Transform alliedParent = closestHolder.parent;
@@ -312,6 +328,17 @@ public class DragAndDropCharacterManager : MonoBehaviour
         sourceCardData = null;
         draggedObject = null;
         sourceHolderManager = null;
+    }
+
+    /// <summary>
+    /// ドラッグ開始時とドロップ時に再生する音声
+    /// </summary>
+    private void PlayDragAndDropSound()
+    {
+        if (dragAndDropAudio != null)
+        {
+            dragAndDropAudio.Play();
+        }
     }
 
     private Vector3 GetMouseWorldPosition()
