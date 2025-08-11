@@ -55,13 +55,14 @@ public class ButtonManager : MonoBehaviour
         transitionManager = FindAnyObjectByType<TransitionManager>(FindObjectsInactive.Include);
 
         // スコア送信
-        if (isGameClear) {
-            UnityroomApiClient.Instance.SendScore(2, stageManager != null ? stageManager.CurrentRopeCount : 0, ScoreboardWriteMode.HighScoreDesc);
-            UnityroomApiClient.Instance.SendScore(1, stageManager != null ? stageManager.CurrentStage: 1, ScoreboardWriteMode.HighScoreDesc);
-        } 
+        UnityroomApiClient.Instance.SendScore(2, stageManager != null ? stageManager.CurrentRopeCount : 0, ScoreboardWriteMode.HighScoreDesc);
+        if(isGameClear)
+        {
+            UnityroomApiClient.Instance.SendScore(1, stageManager != null ? stageManager.CurrentStage - 1: 1, ScoreboardWriteMode.HighScoreDesc);
+        }
         else
         {
-            UnityroomApiClient.Instance.SendScore(1, stageManager != null ? stageManager.CurrentStage - 1: 0, ScoreboardWriteMode.HighScoreDesc);
+            UnityroomApiClient.Instance.SendScore(1, stageManager != null ? stageManager.CurrentStage: 1, ScoreboardWriteMode.HighScoreDesc);
         }
     }
 
