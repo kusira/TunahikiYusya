@@ -14,7 +14,9 @@ public class PauseManager : MonoBehaviour
     [SerializeField] private Button closeButton;
     
     [Header("音声設定")]
+    [Tooltip("ポーズボタンを押すときに再生するAudioSource")]
     [SerializeField] private AudioSource pauseButtonSE;
+    [Tooltip("ポーズを閉じるときに再生するAudioSource")]
     [SerializeField] private AudioSource closeButtonSE;
     
     [Header("アニメーション設定")]
@@ -24,7 +26,6 @@ public class PauseManager : MonoBehaviour
     
     [Header("無効化するマネージャー")]
     [SerializeField] private MonoBehaviour dragAndDropManager;
-    [SerializeField] private MainCameraManager mainCameraManager;
     
     private bool isPaused = false;
     
@@ -89,6 +90,14 @@ public class PauseManager : MonoBehaviour
         // マネージャーを再有効化
         EnableManagers();
         
+        // MainCameraManagerのホバー状態をfalseにリセット
+        MainCameraManager mainCameraManager = FindAnyObjectByType<MainCameraManager>();
+        if (mainCameraManager != null)
+        {
+            // ホバー状態をリセットするメソッドを呼び出し
+            mainCameraManager.ResetHoverState();
+        }
+        
         // 背景をフェードアウト
         if (pauseBlackGround != null)
         {
@@ -116,7 +125,8 @@ public class PauseManager : MonoBehaviour
             dragAndDropManager.enabled = false;
         }
         
-        // MainCameraManagerを無効化
+        // MainCameraManagerをFindObjectOfTypeで探して無効化
+        MainCameraManager mainCameraManager = FindAnyObjectByType<MainCameraManager>();
         if (mainCameraManager != null)
         {
             mainCameraManager.enabled = false;
@@ -131,7 +141,8 @@ public class PauseManager : MonoBehaviour
             dragAndDropManager.enabled = true;
         }
         
-        // MainCameraManagerを再有効化
+        // MainCameraManagerをFindObjectOfTypeで探して再有効化
+        MainCameraManager mainCameraManager = FindAnyObjectByType<MainCameraManager>();
         if (mainCameraManager != null)
         {
             mainCameraManager.enabled = true;
@@ -150,7 +161,7 @@ public class PauseManager : MonoBehaviour
     }
     
     /// <summary>
-    /// 閉じるボタンの音を再生する
+    /// ポーズを閉じる音を再生する
     /// </summary>
     private void PlayCloseButtonSound()
     {

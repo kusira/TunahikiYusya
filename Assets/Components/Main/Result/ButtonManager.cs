@@ -18,6 +18,9 @@ public class ButtonManager : MonoBehaviour
     [SerializeField] private string shareUrl = "https://example.com";
     [SerializeField] private bool isGameClear = false; // インスペクタで切り替え
 
+    [Header("スコア送信設定")]
+    [SerializeField] private bool enableScoreSubmission = true; // スコア送信するかどうか
+
     [Header("クリックアニメーション")]
     [SerializeField] private float pressScale = 0.92f;
     [SerializeField] private float tweenDuration = 0.12f; // 非スケール秒
@@ -54,15 +57,18 @@ public class ButtonManager : MonoBehaviour
 
         transitionManager = FindAnyObjectByType<TransitionManager>(FindObjectsInactive.Include);
 
-        // スコア送信
-        UnityroomApiClient.Instance.SendScore(2, stageManager != null ? stageManager.CurrentRopeCount : 0, ScoreboardWriteMode.HighScoreDesc);
-        if(isGameClear)
+        // スコア送信（設定が有効な場合のみ）
+        if (enableScoreSubmission)
         {
-            UnityroomApiClient.Instance.SendScore(1, stageManager != null ? stageManager.CurrentStage - 1: 1, ScoreboardWriteMode.HighScoreDesc);
-        }
-        else
-        {
-            UnityroomApiClient.Instance.SendScore(1, stageManager != null ? stageManager.CurrentStage: 1, ScoreboardWriteMode.HighScoreDesc);
+            UnityroomApiClient.Instance.SendScore(2, stageManager != null ? stageManager.CurrentRopeCount : 0, ScoreboardWriteMode.HighScoreDesc);
+            if(isGameClear)
+            {
+                UnityroomApiClient.Instance.SendScore(1, stageManager != null ? stageManager.CurrentStage - 1: 1, ScoreboardWriteMode.HighScoreDesc);
+            }
+            else
+            {
+                UnityroomApiClient.Instance.SendScore(1, stageManager != null ? stageManager.CurrentStage: 1, ScoreboardWriteMode.HighScoreDesc);
+            }
         }
     }
 

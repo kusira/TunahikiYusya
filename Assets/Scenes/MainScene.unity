@@ -3854,6 +3854,10 @@ PrefabInstance:
       propertyPath: isGameClear
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6861294107304748616, guid: 249564872c663d54f871076739e6abf5, type: 3}
+      propertyPath: enableScoreSubmission
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8075911018007450444, guid: 249564872c663d54f871076739e6abf5, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.8
@@ -4159,6 +4163,10 @@ PrefabInstance:
     - target: {fileID: 5548243193663840396, guid: 249564872c663d54f871076739e6abf5, type: 3}
       propertyPath: m_Name
       value: ButtonManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5548243193663840396, guid: 249564872c663d54f871076739e6abf5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6861294107304748616, guid: 249564872c663d54f871076739e6abf5, type: 3}
       propertyPath: isGameClear
@@ -5393,7 +5401,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1510273863
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6222,7 +6230,6 @@ MonoBehaviour:
   panelSlideDuration: 0.3
   panelSlideDistance: 100
   dragAndDropManager: {fileID: 679868455}
-  mainCameraManager: {fileID: 519420034}
 --- !u!1 &1755312600
 GameObject:
   m_ObjectHideFlags: 0
@@ -6915,7 +6922,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1918386243
 RectTransform:
   m_ObjectHideFlags: 0

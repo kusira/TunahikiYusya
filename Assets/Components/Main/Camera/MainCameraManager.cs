@@ -232,4 +232,12 @@ public class MainCameraManager : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// ホバー状態をリセットする
+    /// </summary>
+    public void ResetHoverState()
+    {
+        isCameraDragging = false;
+    }
 }
