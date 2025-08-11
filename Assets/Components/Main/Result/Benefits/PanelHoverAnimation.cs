@@ -10,6 +10,9 @@ public class PanelHoverAnimation : MonoBehaviour, IPointerEnterHandler, IPointer
     [SerializeField] private Ease easeIn = Ease.OutQuad;
     [SerializeField] private Ease easeOut = Ease.InQuad;
 
+    [Header("音響設定")]
+    [SerializeField] private AudioSource audioSource;
+
     private RectTransform rectTransform;
     private Vector3 baseScale;
     private Tween currentTween;
@@ -18,6 +21,12 @@ public class PanelHoverAnimation : MonoBehaviour, IPointerEnterHandler, IPointer
     {
         rectTransform = GetComponent<RectTransform>();
         baseScale = rectTransform != null ? rectTransform.localScale : Vector3.one;
+        
+        // AudioSourceの自動取得
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
     }
 
     void OnEnable()
@@ -39,6 +48,12 @@ public class PanelHoverAnimation : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // ホバー音を再生
+        if (audioSource != null && audioSource.clip != null)
+        {
+            audioSource.Play();
+        }
+        
         AnimateTo(baseScale * scaleMultiplier, easeIn);
     }
 

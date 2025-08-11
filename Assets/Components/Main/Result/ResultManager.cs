@@ -35,6 +35,10 @@ public class ResultManager : MonoBehaviour
     [Tooltip("敗北時に表示するテキスト")]
     [SerializeField] private TMP_Text loseText;
 
+    [Header("音響設定")]
+    [SerializeField] private AudioSource winSE;
+    [SerializeField] private AudioSource loseSE;
+
     [Header("無効化するマネージャー")]
     // [SerializeField] private MainCameraManager mainCameraManager; // この行を削除
     
@@ -218,6 +222,16 @@ public class ResultManager : MonoBehaviour
     /// </summary>
     private void AnimateResultText(TMP_Text textToShow)
     {
+        // 勝敗に応じて音を再生
+        if (textToShow == winText && winSE != null && winSE.clip != null)
+        {
+            winSE.Play();
+        }
+        else if (textToShow == loseText && loseSE != null && loseSE.clip != null)
+        {
+            loseSE.Play();
+        }
+
         CanvasGroup textCanvasGroup = textToShow.GetComponent<CanvasGroup>();
         if (textCanvasGroup == null) textCanvasGroup = textToShow.gameObject.AddComponent<CanvasGroup>();
 

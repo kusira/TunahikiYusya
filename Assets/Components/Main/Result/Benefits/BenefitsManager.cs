@@ -50,6 +50,10 @@ public class BenefitsManager : MonoBehaviour
     [Tooltip("閾値以上のときに遷移するシーン名")]
     [SerializeField] private string sceneAtOrBeyondThreshold = "EndScene";
 
+    [Header("音響設定")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private float waitAfterAudio = 0.3f; // 音再生後の待機時間（デフォルト0.3秒）
+
     void Start()
     {
         // ステージ更新（先にインクリメント）と遷移先決定
@@ -348,16 +352,32 @@ public class BenefitsManager : MonoBehaviour
     // パネルから直接呼ばれる（FindAnyObjectByType で呼び出し）
     public void OnPanelSelected(MonoBehaviour selected)
     {
+        // パネル選択音を再生
+        if (audioSource != null && audioSource.clip != null)
+        {
+            audioSource.Play();
+        }
+
         foreach (var p in spawnedPanels)
         {
             if (p == null || p == selected) continue;
             if (p is AddPanelManager a) a.HideAsOther(othersMoveDistance, othersFadeDuration);
             else if (p is LevelUpPanelManager l) l.HideAsOther(othersMoveDistance, othersFadeDuration);
             else if (p is UnlockPanelManager u) u.HideAsOther(othersMoveDistance, othersFadeDuration);
-
-            MoveMainScene();
         }
         spawnedPanels.Clear();
+
+        // 音再生後に待機してからMoveMainSceneを呼び出し
+        StartCoroutine(CoWaitAndMoveMainScene());
+    }
+
+    private IEnumerator CoWaitAndMoveMainScene()
+    {
+        // 音再生後の待機時間
+        yield return new WaitForSecondsRealtime(waitAfterAudio);
+        
+        // 待機後にMoveMainSceneを実行
+        MoveMainScene();
     }
 
     private void MoveEndScene()
